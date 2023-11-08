@@ -12,7 +12,7 @@
     "tsconfig": "*",
     "turbo": "latest"
   },
-  "name": "NotiFly",
+  "name": "notifly",
   "packageManager": "yarn@1.22.19",
   "workspaces": [
     "apps/*",

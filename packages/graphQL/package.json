@@ -1,0 +1,22 @@
+{
+  "name": "@notifly/graphql",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/server.ts",
+    "r": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.9.5",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "graphql": "^16.8.1",
+    "nodemon": "^3.0.1",
+    "@notify/prisma": "*"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.16",
+    "ts-node": "^10.9.1"
+  }
+}
