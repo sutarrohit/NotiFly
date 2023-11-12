@@ -4,19 +4,28 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/server.ts",
-    "r": "ts-node src/index.ts"
+    "dev": "nodemon --exec ts-node src/server.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",
+    "@notifly/interfaces": "*",
+    "@notify/prisma": "*",
+    "@notifly/lib": "*",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "graphql": "^16.8.1",
-    "nodemon": "^3.0.1",
-    "@notify/prisma": "*"
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.4",
+    "nodemon": "^3.0.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.16",
-    "ts-node": "^10.9.1"
+    "@types/jsonwebtoken": "^9.0.5",
+    "dotenv-cli": "^7.3.0",
+    "ts-node": "^10.9.1",
+    "@types/nodemailer": "^6.4.9"
   }
 }

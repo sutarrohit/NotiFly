@@ -4,6 +4,9 @@
   "main": "index.ts",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "5.5.2"
+    "@prisma/client": "5.5.2",
+    "@notifly/lib":"*",
+    "prisma": "^5.5.2",
+    "zod": "^3.22.4"
   }
 }

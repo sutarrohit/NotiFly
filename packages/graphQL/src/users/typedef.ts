@@ -1,7 +1,19 @@
 export const userTypeDefs = `#graphql
 type User{
       id:String
-      name:String
-      age:Int
+      username: String
+      name: String
+      email: String
+      password: String
     }
+
+ type SignupResponse{
+  status:String
+  token:String
+ } 
+
+  type passwordChangedResponse{
+  message:String
+  token:String
+ }     
 `;

@@ -1,5 +1,4 @@
 export const userQueries = `#graphql
- 
-      getUsers:String
+      getUsers(email:String):String
 
 `;

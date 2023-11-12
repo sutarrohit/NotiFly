@@ -1,17 +1,34 @@
-import { prisma } from "@notify/prisma";
+import { IcreateUser, IloginUser } from "@notifly/interfaces";
+import AuthService from "../services/auth/authService";
 
 const queries = {
-  getUsers: async () => {
-    return "This is query";
+  getUsers: async (_: any, { email }: { email: string }) => {
+    const user: any = await AuthService.getUser(email);
+    for (let i = 0; i < 100000; i++) {
+      console.log(i);
+    }
+
+    return user.id;
   },
 };
 const mutations = {
-  createUser: async (obj: any, arg: any, context: any, info: any) => {
-    console.log("obj", obj);
-    console.log("arg", arg);
-    // console.log("context", context);
-    // console.log("info", info);
-    return { name: arg.name, age: arg.age, id: arg.id };
+  createUser: async (_: any, input: IcreateUser) => {
+    const user = await AuthService.createUser(input);
+    return user;
+  },
+
+  loginUser: async (_: any, input: IloginUser) => {
+    const response = await AuthService.loginUser(input);
+    return response;
+  },
+
+  forgotPassword: async (_: any, { email }: { email: string }) => {
+    const response = await AuthService.forgotPassword(email);
+    return response;
+  },
+  resetPassword: async (_: any, payload: { token: string; newPassword: string }) => {
+    const response = await AuthService.resetPassowrd(payload);
+    return response;
   },
 };
 

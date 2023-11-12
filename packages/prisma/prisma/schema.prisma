@@ -11,19 +11,51 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  username      String
+  id            String  @id @default(uuid())
+  userName      String
   name          String
-  email         String
-  emailVerified DateTime?
+  email         String  @db.VarChar(255)
+  emailVerified Boolean @default(false)
   password      String
+  salt          String?
   avatar        String?
 
+  passwordChangedAt         DateTime?
+  passwordResetToken        String?
+  passwordResetTokenExpires DateTime?
+
+  notifications Notifications[] @relation("userNotification")
+
   @@unique([email])
-  @@unique([username])
-  @@unique([username, email])
-  @@index([username])
+  @@unique([userName])
+  @@unique([passwordResetToken])
+  @@unique([userName, email])
+  @@index([userName])
   @@index([email])
   @@index([id])
   @@map(name: "users")
+}
+
+model Notifications {
+  id          String  @id @default(uuid())
+  User        User    @relation("userNotification", fields: [userId], references: [id])
+  userId      String
+  targetPrice String
+  active      Boolean @default(true)
+
+  cryptoToken   CryptoToken @relation(fields: [cryptoTokenId], references: [id])
+  cryptoTokenId Int
+
+  @@map(name: "notifications")
+}
+
+model CryptoToken {
+  id            Int             @id @default(autoincrement())
+  name          String
+  symbol        String
+  Notifications Notifications[]
+
+  @@unique([symbol])
+  @@index([symbol])
+  @@map(name: "crypto_token")
 }
