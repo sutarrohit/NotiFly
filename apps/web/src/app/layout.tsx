@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ApolloWrapper } from "./ApolloWrapper";
+import { ApolloWrapper } from "../lib/providers/ApolloWrapper";
+import Providers from "../lib/providers/Providers";
+import { Header } from "@/components";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,9 +14,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <ApolloWrapper>{children}</ApolloWrapper>
+    <html lang="en" className="dark" style={{ colorScheme: "dark" }}>
+      <body className={`${inter.className} bg-c_White text-c_black dark:bg-c_black dark:text-c_White`}>
+        <Providers>
+          <Header />
+          {children}
+        </Providers>
       </body>
     </html>
   );

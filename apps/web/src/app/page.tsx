@@ -1,11 +1,10 @@
 import Image from "next/image";
-// import Header from "./components/Header";
-// import ClientData from "./components/ClientData";
-
+import { Header } from "../components";
+import Head from "next/head";
 export default function Home() {
   return (
-    <div>
-      <div>Hello</div>
+    <div className="min-h-screen  border-2">
+      <div>THis is main container</div>
     </div>
   );
 }
