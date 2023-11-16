@@ -2,6 +2,7 @@
   "name": "eslint-config-custom",
   "license": "MIT",
   "version": "0.0.0",
+  "type": "module",
   "private": true,
   "devDependencies": {
     "@vercel/style-guide": "^5.0.0",

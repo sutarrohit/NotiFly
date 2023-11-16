@@ -1,5 +1,7 @@
 "use client";
 // ^ this file needs the "use client" pragma
+import { setVerbosity } from "ts-invariant";
+setVerbosity("debug");
 
 import { ApolloLink, HttpLink } from "@apollo/client";
 import {

@@ -1,22 +1,11 @@
 import Image from "next/image";
-import { getClient } from "../apolloClient";
-import { gql } from "@apollo/client";
-import Header from "./components/Header";
+// import Header from "./components/Header";
+// import ClientData from "./components/ClientData";
 
-const GET_LOCATIONS = gql`
-  query Query {
-    getUsers(email: "rohit6")
-  }
-`;
-
-export default async function Home() {
-  const data = await getClient().query({ query: GET_LOCATIONS });
-
+export default function Home() {
   return (
     <div>
-      <Header />
-      {/* <div>{data.data.getUsers}</div>
-      <div>{data.data.getUsers}</div> */}
+      <div>Hello</div>
     </div>
   );
 }

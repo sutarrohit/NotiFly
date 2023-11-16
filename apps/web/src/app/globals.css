@@ -16,7 +16,20 @@
   }
 }
 
-body {
+/* Black : #09090b
+White :#fafafa
+grey:#27272a
+Lite grey :#64646a     
+Gray white :#f4f4f5
+
+Utility colors: 
+red:#e11d48
+ Blue: #2563eb
+Green :#16a34a
+Light Green :: #adfa1d
+Orange :#16a34a */
+
+/* body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
@@ -24,4 +37,4 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-}
+} */

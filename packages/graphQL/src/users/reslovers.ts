@@ -4,11 +4,8 @@ import AuthService from "../services/auth/authService";
 const queries = {
   getUsers: async (_: any, { email }: { email: string }) => {
     const user: any = await AuthService.getUser(email);
-    for (let i = 0; i < 100000; i++) {
-      console.log(i);
-    }
 
-    return user.id;
+    return user.userName;
   },
 };
 const mutations = {
