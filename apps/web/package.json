@@ -11,18 +11,24 @@
   "dependencies": {
     "@apollo/client": "^3.8.7",
     "@apollo/experimental-nextjs-app-support": "^0.5.1",
+    "@hookform/resolvers": "^3.3.2",
     "@notifly/ui": "*",
+    "@notifly/lib": "*",
+    "class-variance-authority": "^0.7.0",
     "graphql": "^16.8.1",
     "next": "14.0.2",
     "next-themes": "^0.2.1",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.48.2",
+    "tailwind-merge": "^2.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
+    "clsx": "^2.0.0",
     "eslint": "^8",
     "eslint-config-next": "14.0.2",
     "next-transpile-modules": "^10.0.1",

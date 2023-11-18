@@ -15,6 +15,7 @@ const mutations = {
   },
 
   loginUser: async (_: any, input: IloginUser) => {
+    console.log("input data", input);
     const response = await AuthService.loginUser(input);
     return response;
   },

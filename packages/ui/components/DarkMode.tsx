@@ -14,7 +14,7 @@ export const DarkMode = () => {
 
   if (isMounted)
     return (
-      <div className="rounded-[0.3rem] text-2xl flex  items-center p-[0.3rem] hover:bg-c_Graywhite hover:dark:bg-c_Litegrey duration-300">
+      <div className="hover:hover:ring-1 ring-[#64646a] rounded-[0.3rem] text-2xl flex  items-center p-[0.3rem] hover:bg-c_Graywhite hover:dark:bg-c_Litegrey duration-300">
         <button onClick={() => setTheme(resolvedTheme == "dark" ? "light" : "dark")}>
           {resolvedTheme == "dark" ? <MdOutlineDarkMode /> : <MdOutlineLightMode />}
         </button>

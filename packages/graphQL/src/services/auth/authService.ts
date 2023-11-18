@@ -4,7 +4,8 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { IcreateUser, IloginUser } from "@notifly/interfaces";
 import { GraphQLError } from "graphql";
-import { customError, VerificationMail } from "@notifly/lib";
+import { customError } from "@notifly/lib";
+import { VerificationMail } from "../../verificationEmail/verification";
 
 class AuthService {
   private static hashPassowrd(password: string) {

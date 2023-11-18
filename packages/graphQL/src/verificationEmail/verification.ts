@@ -27,5 +27,3 @@ export class VerificationMail {
     }
   }
 }
-
-// export default VerificationMail;
