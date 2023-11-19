@@ -1,6 +1,6 @@
 import LoginForm from "./LoginForm";
 import { gql } from "@apollo/client";
-import { getClient } from "../../../apolloClient";
+import { getClient } from "../../../lib/apolloClient";
 
 const GET_LOCATIONS = gql`
   query Query {
@@ -8,16 +8,8 @@ const GET_LOCATIONS = gql`
   }
 `;
 
-const createUser = gql`
-  query Mutate {
-    loginUser(email: "rohitsutar083@gmail.com", password: "12345")
-  }
-`;
-
 const LoginPage = async () => {
-  const { data } = await getClient().query({ query: GET_LOCATIONS });
-
-  console.log("data", data);
+  //const { data } = await getClient().query({ query: GET_LOCATIONS });
 
   return (
     <div className="min-h-[92vh] flex justify-center items-center">

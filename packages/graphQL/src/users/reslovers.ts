@@ -7,6 +7,11 @@ const queries = {
 
     return user.userName;
   },
+
+  errorHandling: async (_: any, { email }: { email: string }) => {
+    const user: any = await AuthService.errorHandling(email);
+    return user;
+  },
 };
 const mutations = {
   createUser: async (_: any, input: IcreateUser) => {
@@ -15,7 +20,6 @@ const mutations = {
   },
 
   loginUser: async (_: any, input: IloginUser) => {
-    console.log("input data", input);
     const response = await AuthService.loginUser(input);
     return response;
   },

@@ -1,4 +1,5 @@
 import { prismaClient } from "@notify/prisma";
+import { Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
@@ -6,6 +7,7 @@ import { IcreateUser, IloginUser } from "@notifly/interfaces";
 import { GraphQLError } from "graphql";
 import { customError } from "@notifly/lib";
 import { VerificationMail } from "../../verificationEmail/verification";
+import { handleError } from "@notifly/lib";
 
 class AuthService {
   private static hashPassowrd(password: string) {
@@ -31,132 +33,167 @@ class AuthService {
 
   //Sign User
   public static async createUser(payload: IcreateUser) {
-    const { userName, name, email, password } = payload;
+    try {
+      const { userName, name, email, password } = payload;
 
-    if (!userName || !name || !email || !password)
-      throw new GraphQLError("Please provide Correct data", {
+      if (!userName || !name || !email || !password)
+        throw new GraphQLError("Please provide Correct data", {
+          extensions: customError.NOT_ACCEPTABLE,
+        });
+
+      const hashPassowrd = await this.hashPassowrd(password);
+      const newUser = await prismaClient.user.create({
+        data: {
+          userName,
+          name,
+          email,
+          password: hashPassowrd,
+        },
+      });
+
+      if (!newUser)
+        throw new GraphQLError("Invalid email or password", {
+          extensions: customError.UNAUTHORIZED,
+        });
+      const verificationToken = this.createJWTToken({ userId: newUser.id, email: newUser.email });
+
+      return {
+        status: "Congratulations! You have successfully signed up.",
+        token: verificationToken,
+      };
+    } catch (error: any) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === "P2002") {
+          throw new GraphQLError("The provided email address is already in use.", {
+            extensions: customError.CONFLICT,
+          });
+        }
+      }
+      return error;
+    }
+  }
+
+  // Error Route
+  public static async errorHandling(email: string) {
+    try {
+      throw new GraphQLError("This is your mistake", {
         extensions: customError.NOT_ACCEPTABLE,
       });
-
-    const hashPassowrd = await this.hashPassowrd(password);
-    const newUser = await prismaClient.user.create({
-      data: {
-        userName,
-        name,
-        email,
-        password: hashPassowrd,
-      },
-    });
-
-    if (!newUser)
-      throw new GraphQLError("Invalid email or password", {
-        extensions: customError.UNAUTHORIZED,
-      });
-    const verificationToken = this.createJWTToken({ userId: newUser.id, email: newUser.email });
-
-    return {
-      status: "Congratulations! You have successfully signed up.",
-      token: verificationToken,
-    };
+      return "this is error hander";
+    } catch (error) {
+      handleError(error);
+    }
   }
 
   //Login User
   public static async loginUser(payload: IloginUser) {
-    const { email, password } = payload;
+    try {
+      const { email, password } = payload;
 
-    if (!email || !password)
-      throw new GraphQLError("Please provide Correct data", {
-        extensions: customError.NOT_ACCEPTABLE,
-      });
+      if (!email || !password)
+        throw new GraphQLError("Please provide Correct data", {
+          extensions: customError.NOT_ACCEPTABLE,
+        });
 
-    const user = await prismaClient.user.findUnique({ where: { email: email } });
-    if (!user)
-      throw new GraphQLError("Invalid email or password", {
-        extensions: customError.UNAUTHORIZED,
-      });
+      const user = await prismaClient.user.findUnique({ where: { email: email } });
+      if (!user)
+        throw new GraphQLError("Invalid email or password", {
+          extensions: customError.UNAUTHORIZED,
+        });
 
-    const passwordVerification = await this.validatePassword(password, user.password);
-    if (!passwordVerification)
-      throw new GraphQLError("Invalid email or password", {
-        extensions: customError.UNAUTHORIZED,
-      });
+      const passwordVerification = await this.validatePassword(password, user.password);
+      if (!passwordVerification)
+        throw new GraphQLError("Invalid email or password", {
+          extensions: customError.UNAUTHORIZED,
+        });
 
-    const token = this.createJWTToken({ userId: user.id, email: user.email });
-    return token;
+      const token = this.createJWTToken({ userId: user.id, email: user.email });
+      return token;
+    } catch (error) {
+      return error;
+    }
   }
 
   //Forgot Password
   public static async forgotPassword(email: string) {
-    const user = await prismaClient.user.findUnique({ where: { email: email } });
+    try {
+      const user = await prismaClient.user.findUnique({ where: { email: email } });
 
-    if (!user)
-      throw new GraphQLError("There in no user with this email", {
-        extensions: customError.NOT_FOUND,
+      if (!user)
+        throw new GraphQLError("There in no user with this email", {
+          extensions: customError.NOT_FOUND,
+        });
+
+      const verificationToken = crypto.randomBytes(32).toString("hex");
+      const hashedToken = crypto.createHash("sha256").update(verificationToken).digest("hex");
+
+      const now = new Date();
+      const userUpdate = await prismaClient.user.update({
+        where: { email: email },
+        data: {
+          passwordResetToken: hashedToken,
+          passwordResetTokenExpires: new Date(now.getTime() + 60 * 60 * 1000),
+        },
       });
 
-    const verificationToken = crypto.randomBytes(32).toString("hex");
-    const hashedToken = crypto.createHash("sha256").update(verificationToken).digest("hex");
+      const verificationURL = `${process.env.CLIENT_DOMAIN}/verification/${verificationToken}`;
+      const message = `To verify your user account, kindly click on the verification link, \n including your verification token via the following link: ${verificationURL}. \n If you have already completed the verification process, please disregard this email. \n Thank you.`;
 
-    const now = new Date();
-    const userUpdate = await prismaClient.user.update({
-      where: { email: email },
-      data: {
-        passwordResetToken: hashedToken,
-        passwordResetTokenExpires: new Date(now.getTime() + 60 * 60 * 1000),
-      },
-    });
-
-    const verificationURL = `${process.env.CLIENT_DOMAIN}/verification/${verificationToken}`;
-    const message = `To verify your user account, kindly click on the verification link, \n including your verification token via the following link: ${verificationURL}. \n If you have already completed the verification process, please disregard this email. \n Thank you.`;
-
-    const mail = await VerificationMail.sendEmail({
-      email: user.email,
-      subject: "Complete User Account Verification, token valid for 60 min",
-      message: message,
-    });
-
-    if (!mail)
-      throw new GraphQLError("Unable to send email, Please try again later.", {
-        extensions: customError.SERVER_ERROR,
+      const mail = await VerificationMail.sendEmail({
+        email: user.email,
+        subject: "Complete User Account Verification, token valid for 60 min",
+        message: message,
       });
 
-    return "verification token sent to your register email.";
+      if (!mail)
+        throw new GraphQLError("Unable to send email, Please try again later.", {
+          extensions: customError.SERVER_ERROR,
+        });
+
+      return "verification token sent to your register email.";
+    } catch (error) {
+      return error;
+    }
   }
 
   //ResetPassword
   public static async resetPassowrd(payload: { token: string; newPassword: string }) {
-    const { token, newPassword } = payload;
+    try {
+      const { token, newPassword } = payload;
 
-    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-    const user = await prismaClient.user.findUnique({
-      where: {
-        passwordResetToken: hashedToken,
-        passwordResetTokenExpires: { gt: new Date() },
-      },
-    });
-
-    if (!user)
-      throw new GraphQLError("Token Invalid or Expired", {
-        extensions: customError.UNAUTHORIZED,
+      const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+      const user = await prismaClient.user.findUnique({
+        where: {
+          passwordResetToken: hashedToken,
+          passwordResetTokenExpires: { gt: new Date() },
+        },
       });
 
-    const hashPassowrd = await this.hashPassowrd(newPassword);
+      if (!user)
+        throw new GraphQLError("Token Invalid or Expired", {
+          extensions: customError.UNAUTHORIZED,
+        });
 
-    await prismaClient.user.update({
-      where: { id: user.id },
-      data: {
-        password: hashPassowrd,
-        passwordChangedAt: new Date(),
-        passwordResetToken: null,
-        passwordResetTokenExpires: null,
-      },
-    });
+      const hashPassowrd = await this.hashPassowrd(newPassword);
 
-    const jwtToken = this.createJWTToken({ userId: user.id, email: user.email });
-    return {
-      message: "Password changed successfully",
-      token: jwtToken,
-    };
+      await prismaClient.user.update({
+        where: { id: user.id },
+        data: {
+          password: hashPassowrd,
+          passwordChangedAt: new Date(),
+          passwordResetToken: null,
+          passwordResetTokenExpires: null,
+        },
+      });
+
+      const jwtToken = this.createJWTToken({ userId: user.id, email: user.email });
+      return {
+        message: "Password changed successfully",
+        token: jwtToken,
+      };
+    } catch (error) {
+      return error;
+    }
   }
 }
 

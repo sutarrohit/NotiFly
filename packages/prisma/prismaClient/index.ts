@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 import { CreateUserInput, LoginUserInput } from "@notifly/lib";
 
 export const prismaClient = new PrismaClient().$extends({

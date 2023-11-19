@@ -1,5 +1,4 @@
 import { ApolloServer } from "@apollo/server";
-import { ApolloServerPluginCacheControl } from "@apollo/server/plugin/cacheControl";
 import { Users } from "./users";
 
 export const server = new ApolloServer({
@@ -24,4 +23,17 @@ export const server = new ApolloServer({
       ...Users.userReslovers.mutations,
     },
   },
+
+  formatError: (error) => {
+    if (process.env.NODE_ENV === "production") {
+      const { locations, path, ...formattedError } = error;
+      return formattedError;
+    } else {
+      const { ...formattedError } = error;
+      return formattedError;
+    }
+  },
 });
+function getUserFromToken(token: any) {
+  throw new Error("Function not implemented.");
+}
