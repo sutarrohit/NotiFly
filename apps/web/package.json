@@ -6,14 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate": "graphql-codegen"
   },
   "dependencies": {
     "@apollo/client": "^3.8.7",
     "@apollo/experimental-nextjs-app-support": "^0.5.1",
     "@hookform/resolvers": "^3.3.2",
-    "@notifly/ui": "*",
     "@notifly/lib": "*",
+    "@notifly/ui": "*",
     "class-variance-authority": "^0.7.0",
     "graphql": "^16.8.1",
     "next": "14.0.2",
@@ -24,6 +25,8 @@
     "tailwind-merge": "^2.0.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

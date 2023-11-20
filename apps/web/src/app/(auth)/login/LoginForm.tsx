@@ -7,15 +7,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@notifly/lib";
 import { FaGoogle } from "react-icons/fa";
 import { gql, useMutation } from "@apollo/client";
+import { LoginUserMutationDocument } from "@/__generated__/graphql";
 
 const LOGIN_USER = gql`
-  mutation loginUser($email: String!, $password: String!) {
+  mutation loginUserMutation($email: String!, $password: String!) {
     loginUser(email: $email, password: $password)
   }
 `;
 
 const LoginForm = () => {
-  const [loginUser, { data, loading, error }] = useMutation(LOGIN_USER);
+  const [loginUser, { data, loading, error }] = useMutation(LoginUserMutationDocument);
 
   const {
     register,

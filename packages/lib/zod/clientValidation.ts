@@ -24,7 +24,7 @@ export const loginSchema: ZodType<loginType> = z.object({
 export type signType = {
   email: string;
   password: string;
-  confirmPassword: string;
+  confirmPassword?: string;
 };
 
 export const signupSchema: ZodType<signType> = z
@@ -59,3 +59,19 @@ export const signupSchema: ZodType<signType> = z
     message: "Password and Confirm Password must be same",
     path: ["confirmPassword"],
   });
+
+export const signupSchemaServer: ZodType<signType> = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be 8 or more characters long" })
+    .refine((value) => /[A-Z]/.test(value), {
+      message: "Password must contain at least one uppercase letter",
+    })
+    .refine((value) => /[0-9]/.test(value), {
+      message: "Password must contain at least one digit",
+    })
+    .refine((value) => /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/.test(value), {
+      message: "Password must contain at least one special character",
+    }),
+});
