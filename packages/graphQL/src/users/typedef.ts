@@ -12,8 +12,19 @@ type User{
   token:String
  } 
 
+ type ResetPasswordResponse{
+  status:String
+  token:String
+ } 
+
   type passwordChangedResponse{
   message:String
   token:String
- }     
+ }   
+
+ type verifyUserResponse{
+  message:String
+  token:String
+ }    
+
 `;

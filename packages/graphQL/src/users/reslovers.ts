@@ -15,12 +15,21 @@ const mutations = {
 
   loginUser: async (_: any, input: IloginUser, context: any) => {
     const token = await AuthService.loginUser(input);
-    context.res.cookie("token", token, {
+    context.res.cookie("AuthToken", token, {
       httpOnly: true,
       secure: true,
       expires: new Date(Date.now() + 30 * 60 * 60 * 1000),
     });
     return token;
+  },
+  verifyUser: async (_: any, input: { verificationToken: string }, context: any) => {
+    const response = await AuthService.verifyUser(input);
+    context.res.cookie("AuthToken", response.token, {
+      httpOnly: true,
+      secure: true,
+      expires: new Date(Date.now() + 30 * 60 * 60 * 1000),
+    });
+    return response;
   },
 
   forgotPassword: async (_: any, { email }: { email: string }) => {
@@ -28,8 +37,8 @@ const mutations = {
     return response;
   },
   resetPassword: async (_: any, payload: { token: string; newPassword: string }, context: any) => {
-    const token = await AuthService.resetPassowrd(payload);
-    context.res.cookie("token", token, {
+    const token: any = await AuthService.resetPassowrd(payload);
+    context.res.cookie("AuthToken", token.token, {
       httpOnly: true,
       secure: true,
       expires: new Date(Date.now() + 30 * 60 * 60 * 1000),

@@ -9,7 +9,7 @@ const startServer = async () => {
   const app = express();
 
   const corsOptions = {
-    origin: "http://localhost:3001",
+    origin: process.env.CLIENT_DOMAIN,
     credentials: true,
   };
 

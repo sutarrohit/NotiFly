@@ -1,6 +1,5 @@
 export interface IcreateUser {
-  userName: string;
-  name: string;
+  userName?: string;
   email: string;
   password: string;
 }

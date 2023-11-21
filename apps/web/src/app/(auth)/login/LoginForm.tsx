@@ -1,19 +1,14 @@
 "use client";
-
 import { Button, InputBox, Label } from "@notifly/ui";
 import { useForm } from "react-hook-form";
+import { FaGoogle } from "react-icons/fa";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@notifly/lib";
-import { FaGoogle } from "react-icons/fa";
-import { gql, useMutation } from "@apollo/client";
-import { LoginUserMutationDocument } from "@/__generated__/graphql";
-
-const LOGIN_USER = gql`
-  mutation loginUserMutation($email: String!, $password: String!) {
-    loginUser(email: $email, password: $password)
-  }
-`;
+import { useMutation } from "@apollo/client";
+import { LoginUserMutationDocument } from "@/graphql/__generated__/graphql";
+import Loader from "@/lib/Loader";
+import Link from "next/link";
 
 const LoginForm = () => {
   const [loginUser, { data, loading, error }] = useMutation(LoginUserMutationDocument);
@@ -57,10 +52,17 @@ const LoginForm = () => {
           </div>
 
           <div className="flex flex-col gap-2 w-[90%] md:w-[85%]">
-            <Label className="">Password</Label>
+            <div className="flex justify-between items-center">
+              <Label className="">Password</Label>
+              <Link href="/forgotPassword" className="text-[0.8rem] font-medium">
+                Forgot Password?
+              </Link>
+            </div>
+
             <InputBox
               variant={"primary"}
               size={"small"}
+              type="password"
               className="w-full py-2"
               placeholder="Password"
               {...register("password")}
@@ -72,7 +74,14 @@ const LoginForm = () => {
           </div>
 
           <div className=" flex gap-3 justify-center w-full">
-            <Button variant={"primary"} type="submit" size={"small"} className="w-[90%] md:w-[85%] py-2">
+            <Button
+              variant={"primary"}
+              type="submit"
+              size={"small"}
+              className="w-[90%] md:w-[85%] py-2"
+              disabled={loading}
+            >
+              {loading && <Loader />}
               Login
             </Button>
           </div>
@@ -85,6 +94,12 @@ const LoginForm = () => {
           <Button variant={"primary"} size={"small"} className="w-[90%] md:w-[85%] py-2">
             <FaGoogle className="mr-2 text-xl" /> Google
           </Button>
+        </div>
+
+        <div className="mt-2 flex justify-center gap-1 items-center text-[0.8rem]">
+          {/* eslint-disable react/no-unescaped-entities */}
+          <p>Don't have an account yet?</p>
+          <Link href="/signup">Sign up</Link>
         </div>
       </form>
     </>

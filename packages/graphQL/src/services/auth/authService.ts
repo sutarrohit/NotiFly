@@ -8,6 +8,7 @@ import { ZodError } from "zod";
 import { IcreateUser, IloginUser } from "@notifly/interfaces";
 import { loginSchema, signupSchemaServer, customError } from "@notifly/lib";
 import { VerificationMail } from "../../verificationEmail/verification";
+import { PasswordVerificationMail } from "../../verificationEmail/passwordVerification";
 
 class AuthService {
   private static hashPassowrd(password: string) {
@@ -26,15 +27,30 @@ class AuthService {
     return jwt.sign(payload, secretKey, options);
   }
 
-  private static async sendVerificationMail(verificationToken: string, user: IcreateUser) {
-    const verificationURL = `${process.env.CLIENT_DOMAIN}/verification/${verificationToken}`;
-    const message = `To verify your user account, kindly click on the verification link, \n including your verification token via the following link: ${verificationURL}. \n If you have already completed the verification process, please disregard this email. \n Thank you.`;
+  private static async sendVerificationMail(
+    verificationToken: string,
+    user: IcreateUser,
+    url: string,
+    subject: string,
+  ) {
+    const verificationURL = `${process.env.CLIENT_DOMAIN}/${url}/${verificationToken}`;
 
-    const mail = await VerificationMail.sendEmail({
-      email: user.email,
-      subject: "Complete User Account Verification, token valid for 60 min",
-      message: message,
-    });
+    let mail;
+    if (url === "verifyUser") {
+      mail = await VerificationMail.sendEmail({
+        email: user.email,
+        subject: subject,
+        clientURL: verificationURL,
+      });
+    }
+
+    if (url === "resetPassword") {
+      mail = await PasswordVerificationMail.sendEmail({
+        email: user.email,
+        subject: subject,
+        clientURL: verificationURL,
+      });
+    }
 
     if (!mail)
       throw new GraphQLError("Unable to send email, Please try again later.", {
@@ -57,14 +73,22 @@ class AuthService {
         throw new GraphQLError(error.errors[0].message);
       }
 
-      const { userName, name, email, password } = payload;
+      const { email, password } = payload;
+      const userName = email.split(".")[0];
+
+      const verificationToken = crypto.randomBytes(32).toString("hex");
+      const hashedToken = crypto.createHash("sha256").update(verificationToken).digest("hex");
+      const now = new Date();
+
       const hashPassowrd = await this.hashPassowrd(password);
+
       const newUser = await prismaClient.user.create({
         data: {
-          userName,
-          name,
+          userName: userName,
           email,
           password: hashPassowrd,
+          passwordResetToken: hashedToken,
+          passwordResetTokenExpires: new Date(now.getTime() + 60 * 60 * 1000),
         },
       });
 
@@ -73,18 +97,9 @@ class AuthService {
           extensions: customError.UNAUTHORIZED,
         });
 
-      const verificationToken = crypto.randomBytes(32).toString("hex");
-      const hashedToken = crypto.createHash("sha256").update(verificationToken).digest("hex");
-
-      const now = new Date();
-      const userUpdate = await prismaClient.user.update({
-        where: { email: email },
-        data: {
-          passwordResetToken: hashedToken,
-          passwordResetTokenExpires: new Date(now.getTime() + 60 * 60 * 1000),
-        },
-      });
-      await this.sendVerificationMail(verificationToken, newUser);
+      const url = "verifyUser";
+      const subject = "Complete user account verification, token valid for 24 hours";
+      await this.sendVerificationMail(verificationToken, newUser, url, subject);
       return {
         status: "Congratulations! You have successfully signed up.",
       };
@@ -96,8 +111,6 @@ class AuthService {
           });
         }
       }
-
-      console.log(error);
       return error;
     }
   }
@@ -151,8 +164,9 @@ class AuthService {
           passwordResetTokenExpires: new Date(now.getTime() + 60 * 60 * 1000),
         },
       });
-
-      await this.sendVerificationMail(verificationToken, user);
+      const url = "resetPassword";
+      const subject = "Reset your NotiFly password.";
+      await this.sendVerificationMail(verificationToken, user, url, subject);
       return "Verification token sent to your register email.";
     } catch (error) {
       return error;
@@ -188,10 +202,53 @@ class AuthService {
       });
 
       const jwtToken = this.createJWTToken({ userId: user.id, email: user.email });
-      return jwtToken;
+      return {
+        token: jwtToken,
+        status: "Password Changed Successully!",
+      };
     } catch (error) {
       return error;
     }
+  }
+
+  // verify user
+  public static async verifyUser(input: { verificationToken: string }) {
+    if (!input.verificationToken)
+      throw new GraphQLError("Please provide verification Token", {
+        extensions: customError.UNAUTHORIZED,
+      });
+
+    const hashedToken = crypto.createHash("sha256").update(input.verificationToken).digest("hex");
+
+    console.log("hastedd token", hashedToken);
+    const user = await prismaClient.user.findUnique({
+      where: {
+        passwordResetToken: hashedToken,
+        passwordResetTokenExpires: { gt: new Date() },
+      },
+    });
+
+    if (!user)
+      throw new GraphQLError("Token Invalid or Expired", {
+        extensions: customError.UNAUTHORIZED,
+      });
+
+    await prismaClient.user.update({
+      where: { id: user.id },
+      data: {
+        passwordChangedAt: new Date(),
+        passwordResetToken: null,
+        passwordResetTokenExpires: null,
+        emailVerified: true,
+      },
+    });
+
+    const token = this.createJWTToken({ userId: user.id, email: user.email });
+
+    return {
+      token: token,
+      message: "You have successfully verified account",
+    };
   }
 }
 

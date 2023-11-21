@@ -2,8 +2,7 @@
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
     "userName" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
+    "email" VARCHAR(255) NOT NULL,
     "emailVerified" BOOLEAN NOT NULL DEFAULT false,
     "password" TEXT NOT NULL,
     "salt" TEXT,

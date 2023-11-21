@@ -1,6 +1,6 @@
 import nodemailer, { Transporter, SendMailOptions, SentMessageInfo } from "nodemailer";
 
-export class VerificationMail {
+export class PasswordVerificationMail {
   public static async sendEmail(options: { email: string; subject: string; clientURL: string }) {
     try {
       // Create a transporter using Gmail SMTP
@@ -48,8 +48,7 @@ export class VerificationMail {
           font-size: 18px;
         "
       >
-        Please click on the button to verify your email and activate your
-        account.
+        Please click on the button to reset your password.
       </p>
 
       <!-- Button with an onclick event that triggers the redirection -->
@@ -67,7 +66,7 @@ export class VerificationMail {
             background-color: #fafafa;
           "
         >
-          Click to verify
+          Reset Password
         </button>
       </a>
 
