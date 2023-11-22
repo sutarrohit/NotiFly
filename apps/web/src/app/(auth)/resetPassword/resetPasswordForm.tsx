@@ -45,9 +45,7 @@ const ResetPasswordForm = ({ params }: { params: { resetToken: string } }) => {
             placeholder="Password"
             {...register("password")}
           />
-          {errors.password?.message && (
-            <span className="text-[0.8rem] text-red-500">{errors.password?.message}</span>
-          )}
+          {errors.password?.message && <span className="text-[0.8rem]">{errors.password?.message}</span>}
         </div>
 
         <div className="flex flex-col gap-2 w-[90%] md:w-[85%]">
@@ -61,12 +59,10 @@ const ResetPasswordForm = ({ params }: { params: { resetToken: string } }) => {
             {...register("confirmPassword")}
           />
           {errors.confirmPassword?.message && (
-            <span className="text-[0.8rem] text-red-500">{errors.confirmPassword?.message}</span>
+            <span className="text-[0.8rem]">{errors.confirmPassword?.message}</span>
           )}
-          {error && <span className="text-[0.8rem] text-red-500 text-center">{error.message}</span>}
-          {data && (
-            <span className="text-[0.8rem] text-green-500 text-center">{data?.resetPassword?.status}</span>
-          )}
+          {error && <span className="text-[0.8rem] text-center">{error.message}</span>}
+          {data && <span className="text-[0.8rem] text-center">{data?.resetPassword?.status}</span>}
         </div>
 
         <div className=" flex gap-3 justify-center w-full">

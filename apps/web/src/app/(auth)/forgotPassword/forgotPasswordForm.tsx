@@ -12,8 +12,6 @@ import Link from "next/link";
 const ForgotPasswordForm = () => {
   const [loginUser, { data, loading, error }] = useMutation(ForgotPasswordMutationDocument);
 
-  console.log("data is here", data);
-
   const {
     register,
     handleSubmit,
@@ -31,7 +29,7 @@ const ForgotPasswordForm = () => {
   return (
     <form
       onSubmit={handleSubmit(DataResponse)}
-      className="relative border rounded-lg border-c_Litegrey w-full md:w-[60%] py-10 flex flex-col justify-center gap-3 md:gap-4"
+      className="relative border rounded-lg border-c_Litegrey w-full md:w-[85%] xl:w-[60%] py-10 flex flex-col justify-center gap-3 md:gap-4"
     >
       <h1 className="font-semibold text-xl text-center">Forgot Password</h1>
 
@@ -47,13 +45,9 @@ const ForgotPasswordForm = () => {
             placeholder="n@example.com"
             {...register("email")}
           />
-          {errors.email?.message && (
-            <span className="text-[0.8rem] text-red-500">{errors.email?.message}</span>
-          )}
-          {error?.message && <span className="text-[0.8rem] text-red-500">{error?.message}</span>}
-          {data?.forgotPassword && (
-            <span className="text-[0.8rem] text-green-500">{data?.forgotPassword}</span>
-          )}
+          {errors.email?.message && <span className="text-[0.8rem]">{errors.email?.message}</span>}
+          {error?.message && <span className="text-[0.8rem]">{error?.message}</span>}
+          {data?.forgotPassword && <span className="text-[0.8rem">{data?.forgotPassword}</span>}
         </div>
 
         <div className=" flex gap-3 justify-center w-full">

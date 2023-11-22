@@ -116,7 +116,7 @@ class AuthService {
   }
 
   //Login User
-  public static async loginUser(payload: IloginUser) {
+  public static async loginUser(payload: IloginUser, context: any) {
     try {
       const result = loginSchema.safeParse(payload);
       if (!result.success) {
@@ -138,7 +138,13 @@ class AuthService {
         });
 
       const token = this.createJWTToken({ userId: user.id, email: user.email });
-      return token;
+      context.res.cookie("AuthToken", token, {
+        httpOnly: true,
+        secure: true,
+        expires: new Date(Date.now() + 30 * 60 * 60 * 1000),
+      });
+
+      return "Successfully logged in";
     } catch (error) {
       return error;
     }
@@ -174,7 +180,7 @@ class AuthService {
   }
 
   //ResetPassword
-  public static async resetPassowrd(payload: { token: string; newPassword: string }) {
+  public static async resetPassowrd(payload: { token: string; newPassword: string }, context: any) {
     try {
       const { token, newPassword } = payload;
       const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
@@ -202,8 +208,12 @@ class AuthService {
       });
 
       const jwtToken = this.createJWTToken({ userId: user.id, email: user.email });
+      context.res.cookie("AuthToken", jwtToken, {
+        httpOnly: true,
+        secure: true,
+        expires: new Date(Date.now() + 30 * 60 * 60 * 1000),
+      });
       return {
-        token: jwtToken,
         status: "Password Changed Successully!",
       };
     } catch (error) {
@@ -212,15 +222,13 @@ class AuthService {
   }
 
   // verify user
-  public static async verifyUser(input: { verificationToken: string }) {
+  public static async verifyUser(input: { verificationToken: string }, context: any) {
     if (!input.verificationToken)
       throw new GraphQLError("Please provide verification Token", {
         extensions: customError.UNAUTHORIZED,
       });
 
     const hashedToken = crypto.createHash("sha256").update(input.verificationToken).digest("hex");
-
-    console.log("hastedd token", hashedToken);
     const user = await prismaClient.user.findUnique({
       where: {
         passwordResetToken: hashedToken,
@@ -244,9 +252,13 @@ class AuthService {
     });
 
     const token = this.createJWTToken({ userId: user.id, email: user.email });
+    context.res.cookie("AuthToken", token, {
+      httpOnly: true,
+      secure: true,
+      expires: new Date(Date.now() + 30 * 60 * 60 * 1000),
+    });
 
     return {
-      token: token,
       message: "You have successfully verified account",
     };
   }

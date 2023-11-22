@@ -31,7 +31,7 @@ const SignupForm = () => {
   return (
     <form
       onSubmit={handleSubmit(dataResponse)}
-      className="relative border rounded-lg border-c_Litegrey w-full md:w-[60%] py-6 md:py-10 flex flex-col justify-center gap-2 md:gap-4"
+      className="relative border rounded-lg border-c_Litegrey w-full md:w-[80%] xl:w-[65%] py-6 md:py-10 flex flex-col justify-center gap-2 md:gap-4"
     >
       <h1 className="font-semibold text-xl text-center">Create an account</h1>
 
@@ -45,9 +45,7 @@ const SignupForm = () => {
             placeholder="n@example.com"
             {...register("email")}
           />
-          {errors.email?.message && (
-            <span className="text-[0.8rem] text-red-500">{errors.email?.message}</span>
-          )}
+          {errors.email?.message && <span className="text-[0.8rem]">{errors.email?.message}</span>}
         </div>
 
         <div className="flex flex-col gap-2 w-[90%] md:w-[85%]">
@@ -60,9 +58,7 @@ const SignupForm = () => {
             placeholder="Password"
             {...register("password")}
           />
-          {errors.password?.message && (
-            <span className="text-[0.8rem] text-red-500">{errors.password?.message}</span>
-          )}
+          {errors.password?.message && <span className="text-[0.8rem]">{errors.password?.message}</span>}
         </div>
 
         <div className="flex flex-col gap-2 w-[90%] md:w-[85%]">
@@ -76,11 +72,11 @@ const SignupForm = () => {
             {...register("confirmPassword")}
           />
           {errors.confirmPassword?.message && (
-            <span className="text-[0.8rem] text-red-500">{errors.confirmPassword?.message}</span>
+            <span className="text-[0.8rem]">{errors.confirmPassword?.message}</span>
           )}
-          {error && <span className="text-[0.8rem] text-red-500 text-center">{error.message}</span>}
+          {error && <span className="text-[0.8rem] text-center">{error.message}</span>}
           {data && (
-            <span className="text-[0.8rem] text-green-500 text-center">
+            <span className="text-[0.8rem] text-center">
               {data.createUser?.status} <br />
               Verification mail sent to your register email address.
             </span>
