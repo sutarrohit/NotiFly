@@ -61,7 +61,7 @@ class AuthService {
 
   //Get User
   public static getUser(email: string) {
-    return prismaClient.user.findUnique({ where: { email: email } });
+    return prismaClient.tUser.findUnique({ where: { email: email } });
   }
 
   //Sign User
@@ -82,7 +82,7 @@ class AuthService {
 
       const hashPassowrd = await this.hashPassowrd(password);
 
-      const newUser = await prismaClient.user.create({
+      const newUser = await prismaClient.tUser.create({
         data: {
           userName: userName,
           email,
@@ -125,7 +125,7 @@ class AuthService {
       }
 
       const { email, password } = payload;
-      const user = await prismaClient.user.findUnique({ where: { email: email } });
+      const user = await prismaClient.tUser.findUnique({ where: { email: email } });
       if (!user)
         throw new GraphQLError("Invalid email or password", {
           extensions: customError.UNAUTHORIZED,
@@ -153,7 +153,7 @@ class AuthService {
   //Forgot Password
   public static async forgotPassword(email: string) {
     try {
-      const user = await prismaClient.user.findUnique({ where: { email: email } });
+      const user = await prismaClient.tUser.findUnique({ where: { email: email } });
       if (!user)
         throw new GraphQLError("There in no user with this email", {
           extensions: customError.NOT_FOUND,
@@ -163,7 +163,7 @@ class AuthService {
       const hashedToken = crypto.createHash("sha256").update(verificationToken).digest("hex");
 
       const now = new Date();
-      const userUpdate = await prismaClient.user.update({
+      const userUpdate = await prismaClient.tUser.update({
         where: { email: email },
         data: {
           passwordResetToken: hashedToken,
@@ -184,7 +184,7 @@ class AuthService {
     try {
       const { token, newPassword } = payload;
       const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-      const user = await prismaClient.user.findUnique({
+      const user = await prismaClient.tUser.findUnique({
         where: {
           passwordResetToken: hashedToken,
           passwordResetTokenExpires: { gt: new Date() },
@@ -197,7 +197,7 @@ class AuthService {
         });
 
       const hashPassowrd = await this.hashPassowrd(newPassword);
-      await prismaClient.user.update({
+      await prismaClient.tUser.update({
         where: { id: user.id },
         data: {
           password: hashPassowrd,
@@ -229,7 +229,7 @@ class AuthService {
       });
 
     const hashedToken = crypto.createHash("sha256").update(input.verificationToken).digest("hex");
-    const user = await prismaClient.user.findUnique({
+    const user = await prismaClient.tUser.findUnique({
       where: {
         passwordResetToken: hashedToken,
         passwordResetTokenExpires: { gt: new Date() },
@@ -241,7 +241,7 @@ class AuthService {
         extensions: customError.UNAUTHORIZED,
       });
 
-    await prismaClient.user.update({
+    await prismaClient.tUser.update({
       where: { id: user.id },
       data: {
         passwordChangedAt: new Date(),

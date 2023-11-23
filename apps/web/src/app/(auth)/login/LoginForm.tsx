@@ -10,11 +10,16 @@ import { LoginUserMutationDocument } from "@/graphql/__generated__/graphql";
 import Loader from "@/lib/Loader";
 import Link from "next/link";
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 const LoginForm = () => {
-  const { data: session } = useSession();
   const [loginUser, { data, loading, error }] = useMutation(LoginUserMutationDocument);
+
+  const searchParams = useSearchParams();
+  const callbackUrl = "/";
+
+  console.log(callbackUrl);
 
   const {
     register,
@@ -90,7 +95,7 @@ const LoginForm = () => {
 
       <div className=" flex gap-3 justify-center w-full">
         <Button
-          onClick={() => signIn()}
+          onClick={() => signIn("google")}
           variant={"primary"}
           size={"small"}
           className="w-[90%] md:w-[85%] py-2"
