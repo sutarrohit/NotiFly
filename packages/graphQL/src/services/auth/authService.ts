@@ -19,7 +19,7 @@ class AuthService {
     return bcrypt.compare(userPassword, password);
   }
 
-  private static createJWTToken(payload: { userId: string; email: string }) {
+  private static createJWTToken(payload: { userId: string; email: string; userType: string }) {
     const secretKey = process.env.JWT_SECRET_KEY || "";
     const options = {
       expiresIn: process.env.JWT_EXPIRES_IN || "30d",
@@ -137,7 +137,8 @@ class AuthService {
           extensions: customError.UNAUTHORIZED,
         });
 
-      const token = this.createJWTToken({ userId: user.id, email: user.email });
+      const userType = "EmailAuthentication";
+      const token = this.createJWTToken({ userId: user.id, email: user.email, userType });
       context.res.cookie("AuthToken", token, {
         httpOnly: true,
         secure: true,
@@ -207,7 +208,8 @@ class AuthService {
         },
       });
 
-      const jwtToken = this.createJWTToken({ userId: user.id, email: user.email });
+      const userType = "EmailAuthentication";
+      const jwtToken = this.createJWTToken({ userId: user.id, email: user.email, userType });
       context.res.cookie("AuthToken", jwtToken, {
         httpOnly: true,
         secure: true,
@@ -251,7 +253,8 @@ class AuthService {
       },
     });
 
-    const token = this.createJWTToken({ userId: user.id, email: user.email });
+    const userType = "EmailAuthentication";
+    const token = this.createJWTToken({ userId: user.id, email: user.email, userType });
     context.res.cookie("AuthToken", token, {
       httpOnly: true,
       secure: true,
@@ -261,6 +264,52 @@ class AuthService {
     return {
       message: "You have successfully verified account",
     };
+  }
+
+  // Google login
+  public static async googleLogin(input: { email: string; sessionToken?: string }, context: any) {
+    console.log("This is email", input.email);
+
+    try {
+      const user = await prismaClient.user.findUnique({
+        where: {
+          email: input.email,
+        },
+        select: {
+          id: true,
+          email: true,
+          sessions: {
+            select: {
+              sessionToken: true,
+            },
+          },
+        },
+      });
+
+      if (!user)
+        throw new GraphQLError("Token Invalid or Expired", {
+          extensions: customError.UNAUTHORIZED,
+        });
+
+      const userType = "Google";
+      const token = this.createJWTToken({
+        userId: user.id,
+        email: user.email as string,
+        userType: userType,
+      });
+
+      console.log("token", token);
+
+      context.res.cookie("AuthToken", token, {
+        httpOnly: true,
+        secure: true,
+        expires: new Date(Date.now() + 30 * 60 * 60 * 1000),
+      });
+
+      return token;
+    } catch (error) {
+      return error;
+    }
   }
 }
 

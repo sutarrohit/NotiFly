@@ -4,9 +4,6 @@ export class VerificationMail {
   public static async sendEmail(options: { email: string; subject: string; clientURL: string }) {
     try {
       // Create a transporter using Gmail SMTP
-
-      console.log(options.email, options.clientURL);
-
       const transporter: Transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {

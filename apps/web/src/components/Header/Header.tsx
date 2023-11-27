@@ -2,8 +2,12 @@ import { IoLogoStencil } from "react-icons/io5";
 import { DarkMode } from "@notifly/ui";
 import ButtonUI from "./HeaderButton";
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 
-const Header = () => {
+const Header = async () => {
+  const sesssion = await getServerSession(authOptions);
+
   return (
     <div className="sticky top-0 z-50 w-full flex justify-center backdrop-blur-md border-b border-c_Litegrey">
       <div className="w-[90%] h-[3.8rem] flex justify-between items-center">

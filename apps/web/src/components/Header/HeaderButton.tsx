@@ -1,19 +1,23 @@
 "use client";
 
-import { useRef } from "react";
 import Link from "next/link";
 import { Button } from "@notifly/ui";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
+import { deleteFromStorage } from "@rehooks/local-storage";
 
 const HeaderButton = () => {
   const path = usePathname();
   const { data: session } = useSession();
-  console.log("session", session);
+
+  const logOutUser = () => {
+    signOut();
+    deleteFromStorage("authToken");
+  };
 
   if (session)
     return (
-      <Button onClick={() => signOut()} variant={"secondary"} size={"small"}>
+      <Button onClick={() => logOutUser()} variant={"secondary"} size={"small"}>
         Log Out
       </Button>
     );

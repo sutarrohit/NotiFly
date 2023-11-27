@@ -34,3 +34,9 @@ export const VERIFY_USER = gql`
     }
   }
 `;
+
+export const GET_TOKEN = gql`
+  mutation GoogleLogin($email: String, $sessionToken: String) {
+    googleLogin(email: $email, sessionToken: $sessionToken)
+  }
+`;

@@ -20,6 +20,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createUser?: Maybe<SignupResponse>;
   forgotPassword?: Maybe<Scalars['String']['output']>;
+  googleLogin?: Maybe<Scalars['String']['output']>;
   loginUser?: Maybe<Scalars['String']['output']>;
   resetPassword?: Maybe<ResetPasswordResponse>;
   verifyUser?: Maybe<VerifyUserResponse>;
@@ -34,6 +35,12 @@ export type MutationCreateUserArgs = {
 
 export type MutationForgotPasswordArgs = {
   email?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationGoogleLoginArgs = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  sessionToken?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -102,6 +109,14 @@ export type VerifyUserResponse = {
   token?: Maybe<Scalars['String']['output']>;
 };
 
+export type GoogleLoginMutationVariables = Exact<{
+  email?: InputMaybe<Scalars['String']['input']>;
+  sessionToken?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GoogleLoginMutation = { __typename?: 'Mutation', googleLogin?: string | null };
+
 export type QueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -146,6 +161,7 @@ export type VerifyUserMutationVariables = Exact<{
 export type VerifyUserMutation = { __typename?: 'Mutation', verifyUser?: { __typename?: 'verifyUserResponse', message?: string | null } | null };
 
 
+export const GoogleLoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"GoogleLogin"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sessionToken"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"googleLogin"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"sessionToken"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sessionToken"}}}]}]}}]} as unknown as DocumentNode<GoogleLoginMutation, GoogleLoginMutationVariables>;
 export const QueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Query"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"StringValue","value":"rohit6","block":false}}]}]}}]} as unknown as DocumentNode<QueryQuery, QueryQueryVariables>;
 export const LoginUserMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"loginUserMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"loginUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}}]}]}}]} as unknown as DocumentNode<LoginUserMutationMutation, LoginUserMutationMutationVariables>;
 export const SingupUserMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"singupUserMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]} as unknown as DocumentNode<SingupUserMutationMutation, SingupUserMutationMutationVariables>;

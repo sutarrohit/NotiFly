@@ -22,6 +22,7 @@ const startServer = async () => {
     "/graphql",
     expressMiddleware(server, {
       context: async ({ req, res }: { req: Request; res: Response }) => {
+        const cookies = req.headers.cookie;
         return { req, res };
       },
     }),

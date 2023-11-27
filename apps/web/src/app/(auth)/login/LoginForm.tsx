@@ -16,10 +16,12 @@ import { useSearchParams } from "next/navigation";
 const LoginForm = () => {
   const [loginUser, { data, loading, error }] = useMutation(LoginUserMutationDocument);
 
+  const handleLogin = async () => {
+    const mydata = await signIn("google");
+  };
+
   const searchParams = useSearchParams();
   const callbackUrl = "/";
-
-  console.log(callbackUrl);
 
   const {
     register,
@@ -95,7 +97,7 @@ const LoginForm = () => {
 
       <div className=" flex gap-3 justify-center w-full">
         <Button
-          onClick={() => signIn("google")}
+          onClick={() => handleLogin()}
           variant={"primary"}
           size={"small"}
           className="w-[90%] md:w-[85%] py-2"

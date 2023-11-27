@@ -4,4 +4,5 @@ export const userMutation = `#graphql
   forgotPassword(email:String):String
   resetPassword(token:String, newPassword:String):ResetPasswordResponse
   verifyUser(verificationToken:String):verifyUserResponse
+  googleLogin(email: String, sessionToken:String):String
 `;
