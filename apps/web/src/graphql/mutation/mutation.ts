@@ -40,3 +40,9 @@ export const GET_TOKEN = gql`
     googleLogin(email: $email, sessionToken: $sessionToken)
   }
 `;
+
+export const USERLOGOUT = gql`
+  mutation UserLogout($email: String) {
+    userLogout(email: $email)
+  }
+`;

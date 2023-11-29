@@ -174,7 +174,7 @@ class AuthService {
       const url = "resetPassword";
       const subject = "Reset your NotiFly password.";
       await this.sendVerificationMail(verificationToken, user, url, subject);
-      return "Verification token sent to your register email.";
+      return "Password reset token sent to your register email.";
     } catch (error) {
       return error;
     }
@@ -266,6 +266,23 @@ class AuthService {
     };
   }
 
+  // UserLogout
+  public static async UserLogout(context: any) {
+    try {
+      if (context.authToken === undefined)
+        throw new GraphQLError("Token not found. Logout failed!");
+
+      context.res.cookie("AuthToken", "", {
+        httpOnly: true,
+        secure: true,
+        expires: new Date(0),
+      });
+      return "User is logged out";
+    } catch (error) {
+      return error;
+    }
+  }
+
   // Google login
   public static async googleLogin(input: { email: string; sessionToken?: string }, context: any) {
     console.log("This is email", input.email);
@@ -297,8 +314,6 @@ class AuthService {
         email: user.email as string,
         userType: userType,
       });
-
-      console.log("token", token);
 
       context.res.cookie("AuthToken", token, {
         httpOnly: true,

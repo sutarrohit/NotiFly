@@ -9,7 +9,6 @@ import { useMutation } from "@apollo/client";
 import { LoginUserMutationDocument } from "@/graphql/__generated__/graphql";
 import Loader from "@/lib/Loader";
 import Link from "next/link";
-
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 

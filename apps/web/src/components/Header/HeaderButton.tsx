@@ -5,16 +5,26 @@ import { Button } from "@notifly/ui";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { deleteFromStorage } from "@rehooks/local-storage";
+import { UserLogoutDocument } from "@/graphql/__generated__/graphql";
+import { useMutation } from "@apollo/client";
 
 const HeaderButton = () => {
   const path = usePathname();
   const { data: session } = useSession();
 
-  const logOutUser = () => {
-    signOut();
-    deleteFromStorage("authToken");
-  };
+  const [userLogout, { data, loading, error }] = useMutation(UserLogoutDocument);
 
+  const logOutUser = () => {
+    if (session) {
+      signOut();
+    }
+    deleteFromStorage("authToken");
+    userLogout({
+      variables: {
+        email: session?.user?.email,
+      },
+    });
+  };
   if (session)
     return (
       <Button onClick={() => logOutUser()} variant={"secondary"} size={"small"}>

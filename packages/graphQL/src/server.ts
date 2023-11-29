@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { expressMiddleware } from "@apollo/server/express4";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import { parse } from "cookie";
 import cors from "cors";
 import { server } from "./index";
 
@@ -22,8 +23,9 @@ const startServer = async () => {
     "/graphql",
     expressMiddleware(server, {
       context: async ({ req, res }: { req: Request; res: Response }) => {
-        const cookies = req.headers.cookie;
-        return { req, res };
+        const cookies = parse(req.headers.cookie || "");
+        const authToken = cookies.AuthToken;
+        return { req, res, authToken };
       },
     }),
   );

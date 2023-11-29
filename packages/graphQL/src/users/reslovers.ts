@@ -18,6 +18,11 @@ const mutations = {
     return response;
   },
 
+  userLogout: async (_: any, email: string, context: any) => {
+    const response = await AuthService.UserLogout(context);
+    return response;
+  },
+
   googleLogin: async (_: any, input: { email: string; sessionToken?: string }, context: any) => {
     const response = await AuthService.googleLogin(input, context);
     return response;
