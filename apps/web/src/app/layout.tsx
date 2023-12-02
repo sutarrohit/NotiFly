@@ -2,12 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "../lib/providers/Providers";
-import { Header } from "@/components";
-import { VerifyJwtDocument } from "@/graphql/__generated__/graphql";
-import { headers } from "next/headers";
-import { getClient } from "@/lib/apolloClient";
-
-import { cookies } from "next/headers";
+import { Header, Footer } from "@/components";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,18 +12,6 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  // const cookieStore = cookies();
-  // const token = cookieStore.get("AuthToken");
-  // console.log("cookies", token?.value);
-  // const { data } = await getClient().query({
-  //   query: VerifyJwtDocument,
-  //   variables: {
-  //     token: token?.value,
-  //   },
-  // });
-
-  // console.log("this is my data", data);
-
   return (
     <html lang="en" className="dark" style={{ colorScheme: "dark" }}>
       <body
@@ -37,6 +20,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Providers>
           <Header />
           {children}
+          <Footer />
         </Providers>
       </body>
     </html>

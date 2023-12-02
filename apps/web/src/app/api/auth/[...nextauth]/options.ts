@@ -43,31 +43,3 @@ export const authOptions = {
     signIn: "/login",
   },
 };
-
-// async function getCustomeCookies(session: any, user: any, req?: NextApiRequest, res?: NextApiResponse) {
-//   try {
-//     const graphqlEndpoint = "http://localhost:8000/graphql";
-//     const GET_TOKEN = `
-//     mutation GoogleLogin($email: String, $sessionToken: String) {
-//         googleLogin(email: $email, sessionToken: $sessionToken)
-//       }
-//     `;
-
-//     const response = await axios.post(graphqlEndpoint, {
-//       query: GET_TOKEN,
-//       variables: {
-//         email: user?.email,
-//         sessionToken: "fsddf",
-//       },
-//     });
-
-//     console.log("GraphQL server response:", response.data);
-
-//     // res.setHeader("Set-Cookie", `AuthToken=${response.data.data.token}; Path=/; HttpOnly`);
-
-//     return true;
-//   } catch (error) {
-//     console.error("Error calling GraphQL server:", error);
-//     throw error;
-//   }
-// }

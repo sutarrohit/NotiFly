@@ -20,3 +20,7 @@ red:#e11d48
 Green :#16a34a
 Light Green :: #adfa1d
 Orange :#16a34a */
+
+* {
+  scroll-behavior: smooth;
+}

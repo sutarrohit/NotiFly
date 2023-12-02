@@ -11,7 +11,6 @@ const GET_LOCATIONS = gql`
 
 const LoginPage = async () => {
   const { data } = await getClient().query({ query: GET_LOCATIONS });
-  console.log("myData", data);
 
   return (
     <div className="min-h-[92vh] flex justify-center items-center">

@@ -298,8 +298,6 @@ class AuthService {
 
   // Google login
   public static async googleLogin(input: { email: string; sessionToken?: string }, context: any) {
-    console.log("This is email", input.email);
-
     try {
       const user = await prismaClient.user.findUnique({
         where: {

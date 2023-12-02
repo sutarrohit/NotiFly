@@ -84,7 +84,6 @@ export class VerificationMail {
       };
       const info: SentMessageInfo = await transporter.sendMail(mailOptions);
       return true;
-      // console.log("Email sent:", info.response);
     } catch (error) {
       console.error("Error sending email:", error);
       return false;
