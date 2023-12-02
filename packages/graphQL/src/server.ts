@@ -25,6 +25,8 @@ const startServer = async () => {
       context: async ({ req, res }: { req: Request; res: Response }) => {
         const cookies = parse(req.headers.cookie || "");
         const authToken = cookies.AuthToken;
+
+        console.log("myToken", authToken);
         return { req, res, authToken };
       },
     }),

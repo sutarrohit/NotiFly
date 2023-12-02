@@ -9,6 +9,7 @@ import { IcreateUser, IloginUser } from "@notifly/interfaces";
 import { loginSchema, signupSchemaServer, customError } from "@notifly/lib";
 import { VerificationMail } from "../../verificationEmail/verification";
 import { PasswordVerificationMail } from "../../verificationEmail/passwordVerification";
+import { promises } from "nodemailer/lib/xoauth2";
 
 class AuthService {
   private static hashPassowrd(password: string) {
@@ -25,6 +26,18 @@ class AuthService {
       expiresIn: process.env.JWT_EXPIRES_IN || "30d",
     };
     return jwt.sign(payload, secretKey, options);
+  }
+
+  public static verifyJWT(token: string) {
+    const secretKey = process.env.JWT_SECRET_KEY || "";
+    return new Promise((resolve, rejected) => {
+      jwt.verify(token, secretKey, (err, decoded) => {
+        if (!err) {
+          resolve(true);
+        }
+        resolve(false);
+      });
+    });
   }
 
   private static async sendVerificationMail(

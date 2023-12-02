@@ -4,7 +4,12 @@ import AuthService from "../services/auth/authService";
 const queries = {
   getUsers: async (_: any, { email }: { email: string }) => {
     const user: any = await AuthService.getUser(email);
-    return user.userName;
+    return "This isdjkhuhhhhjj Query";
+  },
+
+  verifyJWT: async (_: any, { token }: { token: string }) => {
+    const response = await AuthService.verifyJWT(token);
+    return response;
   },
 };
 const mutations = {
