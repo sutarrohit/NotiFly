@@ -11,11 +11,22 @@ import Loader from "@/lib/Loader";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
+import { writeStorage } from "@rehooks/local-storage";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const LoginForm = () => {
+  const router = useRouter();
   const [loginUser, { data, loading, error }] = useMutation(LoginUserMutationDocument);
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
+    if (!loading && data) {
+      writeStorage("authToken", true);
+      router.replace("/", { scroll: false });
+      router.refresh();
+    }
+  };
+  const handleGoogleLogin = async () => {
     const mydata = await signIn("google");
   };
 
@@ -36,6 +47,10 @@ const LoginForm = () => {
       },
     });
   };
+
+  useEffect(() => {
+    handleLogin();
+  }, [data]);
 
   return (
     <form
@@ -84,6 +99,7 @@ const LoginForm = () => {
             size={"small"}
             className="w-[90%] md:w-[85%] py-2"
             disabled={loading}
+            onClick={() => handleLogin()}
           >
             {loading && <Loader />}
             Login
@@ -96,7 +112,7 @@ const LoginForm = () => {
 
       <div className=" flex gap-3 justify-center w-full">
         <Button
-          onClick={() => handleLogin()}
+          onClick={() => handleGoogleLogin()}
           variant={"primary"}
           size={"small"}
           className="w-[90%] md:w-[85%] py-2"

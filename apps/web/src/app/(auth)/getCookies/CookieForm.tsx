@@ -22,13 +22,14 @@ const CookieForm = () => {
       });
       if (!loading) {
         writeStorage("authToken", true);
-        router.push("/", { scroll: false });
+        router.replace("/", { scroll: false });
+        router.refresh();
       }
     }
   }, [session]);
 
-  if (session === null) return <>{router.push("/", { scroll: false })}</>;
-  if (session && authToken && !loading) return <>{router.push("/", { scroll: false })}</>;
+  if (session === null) return <>{(router.replace("/", { scroll: false }), router.refresh())}</>;
+  // if (session && authToken && !loading) return <>{router.push("/", { scroll: false })}</>;
 
   return <div className="h-screen flex justify-center items-center">{<Loader />}</div>;
 };

@@ -2,7 +2,7 @@
 
 import { ThemeProvider } from "next-themes";
 import { ApolloWrapper } from "./ApolloWrapper";
-import SessionProvider from "../SessionProvider";
+import SessionProvider from "./SessionProvider";
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <SessionProvider>

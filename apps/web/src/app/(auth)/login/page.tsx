@@ -1,6 +1,6 @@
 import LoginForm from "./LoginForm";
 import { gql } from "@apollo/client";
-import { getClient } from "../../../lib/apolloClient";
+import { getClient } from "@/lib/apolloClient";
 import { AnimatedHeader } from "@notifly/ui";
 
 const GET_LOCATIONS = gql`
@@ -10,7 +10,8 @@ const GET_LOCATIONS = gql`
 `;
 
 const LoginPage = async () => {
-  //const { data } = await getClient().query({ query: GET_LOCATIONS });
+  const { data } = await getClient().query({ query: GET_LOCATIONS });
+  console.log("myData", data);
 
   return (
     <div className="min-h-[92vh] flex justify-center items-center">

@@ -2,11 +2,11 @@ import { IoLogoStencil } from "react-icons/io5";
 import { DarkMode } from "@notifly/ui";
 import ButtonUI from "./HeaderButton";
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { cookies } from "next/headers";
 
 const Header = async () => {
-  const sesssion = await getServerSession(authOptions);
+  const cookieStore = cookies();
+  const token = cookieStore.get("AuthToken")?.value || "";
 
   return (
     <div className="sticky top-0 z-50 w-full flex justify-center backdrop-blur-md border-b border-c_Litegrey">
@@ -25,7 +25,7 @@ const Header = async () => {
         {/* Right Side */}
         <div className="flex gap-3 ">
           <div className="hidden md:flex">
-            <ButtonUI />
+            <ButtonUI token={token} />
           </div>
 
           <DarkMode />

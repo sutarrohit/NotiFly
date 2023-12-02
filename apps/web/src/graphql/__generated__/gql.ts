@@ -14,13 +14,14 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  query Query {\n    getUsers(email: \"rohit6\")\n  }\n": types.QueryDocument,
+    "\n  mutation UserLogout($email: String) {\n    userLogout(email: $email)\n  }\n": types.UserLogoutDocument,
     "\n  mutation loginUserMutation($email: String!, $password: String!) {\n    loginUser(email: $email, password: $password)\n  }\n": types.LoginUserMutationDocument,
     "\n  mutation singupUserMutation($email: String!, $password: String!) {\n    createUser(email: $email, password: $password) {\n      status\n    }\n  }\n": types.SingupUserMutationDocument,
     "\n  mutation forgotPasswordMutation($email: String!) {\n    forgotPassword(email: $email)\n  }\n": types.ForgotPasswordMutationDocument,
     "\n  mutation resetPasswordMutation($token: String, $newPassword: String) {\n    resetPassword(token: $token, newPassword: $newPassword) {\n      status\n    }\n  }\n": types.ResetPasswordMutationDocument,
     "\n  mutation VerifyUser($verificationToken: String) {\n    verifyUser(verificationToken: $verificationToken) {\n      message\n    }\n  }\n": types.VerifyUserDocument,
     "\n  mutation GoogleLogin($email: String, $sessionToken: String) {\n    googleLogin(email: $email, sessionToken: $sessionToken)\n  }\n": types.GoogleLoginDocument,
-    "\n  mutation UserLogout($email: String) {\n    userLogout(email: $email)\n  }\n": types.UserLogoutDocument,
+    "\n  query verifyJWT($token: String) {\n    verifyJWT(token: $token)\n  }\n": types.VerifyJwtDocument,
 };
 
 /**
@@ -41,6 +42,10 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query Query {\n    getUsers(email: \"rohit6\")\n  }\n"): (typeof documents)["\n  query Query {\n    getUsers(email: \"rohit6\")\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UserLogout($email: String) {\n    userLogout(email: $email)\n  }\n"): (typeof documents)["\n  mutation UserLogout($email: String) {\n    userLogout(email: $email)\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -68,7 +73,7 @@ export function gql(source: "\n  mutation GoogleLogin($email: String, $sessionTo
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation UserLogout($email: String) {\n    userLogout(email: $email)\n  }\n"): (typeof documents)["\n  mutation UserLogout($email: String) {\n    userLogout(email: $email)\n  }\n"];
+export function gql(source: "\n  query verifyJWT($token: String) {\n    verifyJWT(token: $token)\n  }\n"): (typeof documents)["\n  query verifyJWT($token: String) {\n    verifyJWT(token: $token)\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};
