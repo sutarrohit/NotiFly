@@ -1,0 +1,9 @@
+{
+  "name": "@notifly/recoil",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.ts",
+  "dependencies": {
+    "recoil": "^0.7.7"
+  }
+}

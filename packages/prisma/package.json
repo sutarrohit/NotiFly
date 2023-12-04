@@ -1,11 +1,12 @@
 {
-  "name": "@notify/prisma",
+  "name": "@notifly/prisma",
   "version": "1.0.0",
   "main": "index.ts",
+  "private": true,
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "5.5.2",
-    "@notifly/lib":"*",
+    "@notifly/lib": "*",
     "prisma": "^5.5.2",
     "zod": "^3.22.4"
   }

@@ -1,5 +1,5 @@
 import GoogleProvider from "next-auth/providers/google";
-import { prismaClient } from "@notify/prisma";
+import { prismaClient } from "@notifly/prisma";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 export const authOptions = {

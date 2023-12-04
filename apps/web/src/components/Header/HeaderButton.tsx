@@ -14,7 +14,6 @@ const HeaderButton = ({ token }: { token: string }) => {
   const path = usePathname();
   const router = useRouter();
 
-  console.log("Header", token);
   const { data: session } = useSession();
   const [userLogout, { data, loading, error }] = useMutation(UserLogoutDocument);
 

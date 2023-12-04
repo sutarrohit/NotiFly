@@ -1,4 +1,4 @@
-import { IcreateUser, IloginUser } from "@notifly/interfaces";
+import { IcreateUser, IloginUser } from "@notifly/lib";
 import AuthService from "../services/auth/authService";
 
 const queries = {

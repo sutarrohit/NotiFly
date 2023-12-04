@@ -1,13 +1,14 @@
-import Image from "next/image";
-import { Header } from "../components";
-import Head from "next/head";
-import { HeroSection } from "../components";
+import { HeroSection, PriceDashboard } from "../components";
+import { cookies } from "next/headers";
 
 export default function Home() {
+  const cookieStore = cookies();
+  const token = cookieStore.get("AuthToken")?.value || "";
   return (
     <div className="min-h-screen relative">
       <div>
-        <HeroSection />
+        {!token && <HeroSection />}
+        {token && <PriceDashboard />}
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ const Header = async () => {
   const token = cookieStore.get("AuthToken")?.value || "";
 
   return (
-    <div className=" sticky top-0 z-50 w-full flex justify-center backdrop-blur-md border-b border-c_Litegrey">
+    <div className=" sticky top-0 z-50 w-full flex justify-center backdrop-blur-xl border-b border-c_Litegrey">
       <div className="w-[90%] h-[3.8rem] flex justify-between items-center">
         {/* Left Side */}
         <div>

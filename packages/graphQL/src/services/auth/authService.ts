@@ -1,11 +1,11 @@
-import { prismaClient } from "@notify/prisma";
+import { prismaClient } from "@notifly/prisma";
 import { Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { GraphQLError } from "graphql";
 import { ZodError } from "zod";
-import { IcreateUser, IloginUser } from "@notifly/interfaces";
+import { IcreateUser, IloginUser } from "@notifly/lib";
 import { loginSchema, signupSchemaServer, customError } from "@notifly/lib";
 import { VerificationMail } from "../../verificationEmail/verification";
 import { PasswordVerificationMail } from "../../verificationEmail/passwordVerification";

@@ -16,6 +16,7 @@
     "@next-auth/prisma-adapter": "^1.0.7",
     "@notifly/lib": "*",
     "@notifly/ui": "*",
+    "@notifly/recoil": "*",
     "@rehooks/local-storage": "^2.4.5",
     "axios": "^1.6.2",
     "class-variance-authority": "^0.7.0",
