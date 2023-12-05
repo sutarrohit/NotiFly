@@ -29,7 +29,8 @@ const CookieForm = () => {
   }, [session]);
 
   if (session === null) return <>{(router.replace("/", { scroll: false }), router.refresh())}</>;
-  // if (session && authToken && !loading) return <>{router.push("/", { scroll: false })}</>;
+  // if (session && authToken && !loading)
+  //   return <>{(router.replace("/", { scroll: false }), router.refresh())}</>;
 
   return <div className="h-screen flex justify-center items-center">{<Loader />}</div>;
 };

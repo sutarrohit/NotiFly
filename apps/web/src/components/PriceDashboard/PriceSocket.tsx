@@ -2,26 +2,13 @@
 import Image from "next/image";
 import { Button } from "@notifly/ui";
 import { useRecoilState } from "recoil";
-import { textState } from "@notifly/recoil";
+import { isAuthenticated } from "@notifly/recoil";
 import { useEffect, useState } from "react";
-const socket = new WebSocket(
-  "wss://stream.binance.com:9443/stream?streams=ethusdt@trade/btcusdt@trade/bnbusdt@trade/solusdt@trade",
-);
+import TokenPrice from "@/lib/websocket/TokenPrice";
 
 const PriceSocket = () => {
-  const [text, setText] = useRecoilState(textState);
-
-  console.log("recoil", text);
-
-  const [ethusdt, setEthUsdt] = useState();
-  const [btcusdt, setBtcUsdt] = useState();
-  const [bnbusdt, setBnbUsdt] = useState();
-  const [solusdt, setSolUsdt] = useState();
-
-  // console.log("ethusdt", ethusdt?.data.p);
-  // console.log("btcusdt", btcusdt);
-  // console.log("bnbusdt", bnbusdt);
-  // console.log("solusdt", solusdt);
+  const [authenticated, setAuthenticated] = useRecoilState(isAuthenticated);
+  console.log("authenticated", authenticated);
 
   const tokenArray = [
     // {
@@ -146,28 +133,6 @@ const PriceSocket = () => {
     },
   ];
 
-  // useEffect(() => {
-  //   socket.onmessage = (event) => {
-  //     const data = JSON.parse(event.data);
-
-  //     if (data.stream === "ethusdt@trade") {
-  //       setEthUsdt(data);
-  //     }
-
-  //     if (data.stream === "btcusdt@trade") {
-  //       setBtcUsdt(data);
-  //     }
-  //     if (data.stream === "bnbusdt@trade") {
-  //       setBnbUsdt(data);
-  //     }
-  //     if (data.stream === "solusdt@trade") {
-  //       setSolUsdt(data);
-  //     }
-  //     // console.log("ethusd", event);
-  //   };
-  // }, []);
-
-  socket.close();
   return (
     <div className="min-h-screen w-[90%]">
       {/* Title */}
@@ -205,6 +170,7 @@ const PriceSocket = () => {
           );
         })}
       </div>
+      <TokenPrice />
     </div>
   );
 };

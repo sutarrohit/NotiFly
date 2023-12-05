@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "../lib/providers/Providers";
 import { Header, Footer } from "@/components";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,11 +18,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body
         className={`${inter.className} bg-c_White text-c_black dark:bg-c_black dark:text-c_White relative`}
       >
-        <Providers>
-          <Header />
-          {children}
-          <Footer />
-        </Providers>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Providers>
+            <Header />
+            {children}
+            <Footer />
+          </Providers>
+        </Suspense>
       </body>
     </html>
   );
