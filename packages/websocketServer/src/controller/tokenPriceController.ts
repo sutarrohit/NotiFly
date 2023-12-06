@@ -1,21 +1,31 @@
-const tokenSet1 = "ethusdt@trade/btcusdt@trade/bnbusdt@trade/solusdt@trade";
-const binanceSocket = new WebSocket(`wss://stream.binance.com:9443/stream?streams=${tokenSet1}`);
+import { startServer } from "../server";
+import WebSocket from "ws";
+import { tokenSet1 } from "../utils/tokenSets";
+import { pushDataToClients } from "./serverController";
 
-let dataArray: any[] = [];
+export let dataArray: any = {};
 
-binanceSocket.onmessage = (event) => {
-  const newData = JSON.parse(event.data.toString());
+export const gettokensPrice = () => {
+  const binanceSocket = new WebSocket(`wss://stream.binance.com:9443/stream?streams=${tokenSet1}`);
 
-  // Check if an entry with the same identifier exists in the array
-  const existingIndex = dataArray.findIndex((entry) => entry.id === newData.id);
+  binanceSocket.on("open", () => {
+    console.log("connected");
+  });
+  binanceSocket.on("close", (code, reason) => {
+    console.log(`WebSocket connection closed. Code: ${code}, Reason: ${reason}`);
+    startServer();
+  });
+  binanceSocket.on("error", (error) => {
+    console.error(`WebSocket error: ${error.message}`);
+    startServer();
+  });
 
-  if (existingIndex !== -1) {
-    // Modify the existing entry
-    dataArray[existingIndex] = newData;
-  } else {
-    // Add the new entry to the array
-    dataArray.push(newData);
-  }
+  binanceSocket.onmessage = (event: any) => {
+    const newData = JSON.parse(event.data);
+    dataArray[newData.data.s] = newData.data.p;
+  };
 
-  console.log(dataArray);
+  setInterval(() => {
+    pushDataToClients(dataArray);
+  }, 1000);
 };

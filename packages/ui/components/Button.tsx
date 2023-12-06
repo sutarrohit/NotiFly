@@ -15,6 +15,7 @@ const buttonVariants = cva(
       size: {
         small: "py-1 px-6",
         large: "text-xl py-3 px-6",
+        thiny: "py-[0.2px] px-4",
       },
     },
     defaultVariants: {

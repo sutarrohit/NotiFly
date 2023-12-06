@@ -1,137 +1,30 @@
 "use client";
 import Image from "next/image";
 import { Button } from "@notifly/ui";
-import { useRecoilState } from "recoil";
-import { isAuthenticated } from "@notifly/recoil";
-import { useEffect, useState } from "react";
-import TokenPrice from "@/lib/websocket/TokenPrice";
+import { tokenData } from "@notifly/lib";
+import { useState } from "react";
+import useWebSocket from "react-use-websocket";
+import Link from "next/link";
+import { GrCaretPrevious, GrCaretNext } from "react-icons/gr";
 
 const PriceSocket = () => {
-  const [authenticated, setAuthenticated] = useRecoilState(isAuthenticated);
-  console.log("authenticated", authenticated);
+  const [liveTokenPrice, setLiveTokenPrice] = useState();
+  const [visibleItems, setVisibleItems] = useState(0);
 
-  const tokenArray = [
-    // {
-    //   symbol: "BTC",
-    //   name: "Bitcoin",
-    //   price: btcusdt?.data.p,
-    //   icon: "/icons/btc.png",
-    // },
-    // {
-    //   symbol: "ETH",
-    //   name: "Ethereum",
-    //   price: btcusdt?.data.p,
-    //   icon: "/icons/eth.png",
-    // },
-    // {
-    //   symbol: "SOl",
-    //   name: "Solana",
-    //   price: ethusdt?.data.p,
-    //   icon: "/icons/sol.png",
-    // },
-    // {
-    //   symbol: "AVAX",
-    //   name: "AVAX",
-    //   price: bnbusdt?.data.p,
-    //   icon: "/icons/avax.png",
-    // },
-    // {
-    //   symbol: "BTC",
-    //   name: "Bitcoin",
-    //   price: solusdt?.data.p,
-    //   icon: "/icons/btc.png",
-    // },
-    {
-      symbol: "ETH",
-      name: "Ethereum",
-      price: "1212434",
-      icon: "/icons/eth.png",
-    },
-    {
-      symbol: "SOl",
-      name: "Solana",
-      price: "1212434",
-      icon: "/icons/sol.png",
-    },
-    {
-      symbol: "AVAX",
-      name: "AVAX",
-      price: "1212434",
-      icon: "/icons/avax.png",
-    },
-    {
-      symbol: "BTC",
-      name: "Bitcoin",
-      price: "1212434",
-      icon: "/icons/btc.png",
-    },
-    {
-      symbol: "ETH",
-      name: "Ethereum",
-      price: "1212434",
-      icon: "/icons/eth.png",
-    },
-    {
-      symbol: "SOl",
-      name: "Solana",
-      price: "1212434",
-      icon: "/icons/sol.png",
-    },
-    {
-      symbol: "AVAX",
-      name: "AVAX",
-      price: "1212434",
-      icon: "/icons/avax.png",
-    },
-    {
-      symbol: "BTC",
-      name: "Bitcoin",
-      price: "1212434",
-      icon: "/icons/btc.png",
-    },
-    {
-      symbol: "ETH",
-      name: "Ethereum",
-      price: "1212434",
-      icon: "/icons/eth.png",
-    },
-    {
-      symbol: "SOl",
-      name: "Solana",
-      price: "1212434",
-      icon: "/icons/sol.png",
-    },
-    {
-      symbol: "AVAX",
-      name: "AVAX",
-      price: "1212434",
-      icon: "/icons/avax.png",
-    },
-    {
-      symbol: "BTC",
-      name: "Bitcoin",
-      price: "1212434",
-      icon: "/icons/btc.png",
-    },
-    {
-      symbol: "ETH",
-      name: "Ethereum",
-      price: "1212434",
-      icon: "/icons/eth.png",
-    },
-    {
-      symbol: "SOl",
-      name: "Solana",
-      price: "1212434",
-      icon: "/icons/sol.png",
-    },
-    {
-      symbol: "AVAX",
-      name: "AVAX",
-      price: "1212434",
-      icon: "/icons/avax.png",
-    },
-  ];
+  console.log("liveTokenPrice", liveTokenPrice);
+
+  const nextPage = () => {
+    if (visibleItems + 15 < tokenData.length) setVisibleItems(visibleItems + 15);
+  };
+  const prevPage = () => {
+    if (visibleItems > 0) setVisibleItems(visibleItems - 15);
+  };
+
+  const { getWebSocket } = useWebSocket("ws://localhost:1337");
+  getWebSocket()?.addEventListener("message", (event: any) => {
+    let tokenPriceData = JSON.parse(event.data);
+    setLiveTokenPrice(tokenPriceData);
+  });
 
   return (
     <div className="min-h-screen w-[90%]">
@@ -144,10 +37,11 @@ const PriceSocket = () => {
           <div>Price</div>
           <div>Notification</div>
         </div>
-        {tokenArray.map((element, key) => {
+        {tokenData.slice(visibleItems, visibleItems + 15).map((element, key) => {
           return (
             <div key={key} className="border-b-[0.06rem] border-c_grey py-4 md:p-4 grid grid-cols-3">
               <div className="flex items-center gap-2 md:gap-5">
+                <div className="hidden md:block ml-3 text-sm text-c_Litegrey">{element.id}.</div>
                 <Image src={element.icon} alt="" width="35" height="35" />
                 <div className="flex">
                   <span className="text-sm font-bold">{element.symbol}</span>
@@ -155,22 +49,55 @@ const PriceSocket = () => {
                 </div>
               </div>
 
-              <span className="flex items-center text-sm font-semibold">{element.price}</span>
+              <span className="flex items-center text-sm font-semibold">
+                $
+                {(liveTokenPrice && liveTokenPrice[element.price] > 10
+                  ? parseFloat(liveTokenPrice[element.price]).toFixed(3)
+                  : liveTokenPrice && liveTokenPrice[element.price] > 0.1
+                  ? parseFloat(liveTokenPrice[element.price]).toFixed(4)
+                  : liveTokenPrice && liveTokenPrice[element.price]) || "0"}
+              </span>
 
               <div>
                 <Button
-                  variant={"secondary"}
+                  variant={"primary"}
                   size={"small"}
-                  className="w-[90%] md:w-[70%] lg:w-[50%] xl:w-[40%] md:py-2 text-sm font-extrabold"
+                  className="w-[90%] md:w-[80%] lg:w-[60%] xl:w-[45%]  md:py-2 text-sm font-extrabold"
                 >
-                  Create
+                  <span className="hidden md:inline-block">Create Notification</span>
+                  <span className="inline-block md:hidden">Create</span>
                 </Button>
               </div>
             </div>
           );
         })}
+
+        {/* nav buttons */}
+        <div className="mt-10 flex justify-end gap-4 text-sm">
+          <Link href="/">
+            <Button
+              variant={"secondary"}
+              size={"thiny"}
+              className="py-[0.3rem] px-[1rem] font-extrabold"
+              onClick={() => prevPage()}
+            >
+              <GrCaretPrevious className="mr-2" />
+              Prev
+            </Button>
+          </Link>
+          <Link href="/">
+            <Button
+              variant={"primary"}
+              size={"thiny"}
+              className="py-[0.3rem] px-[1rem] font-extrabold"
+              onClick={() => nextPage()}
+            >
+              Next
+              <GrCaretNext className="ml-2" />
+            </Button>
+          </Link>
+        </div>
       </div>
-      <TokenPrice />
     </div>
   );
 };
