@@ -49,14 +49,22 @@ const PriceSocket = () => {
               <span className="flex items-center text-sm font-semibold">
                 $
                 {liveTokenPrice && liveTokenPrice[element.price] > 10
-                  ? parseFloat(liveTokenPrice[element.price]).toFixed(3)
+                  ? parseFloat(liveTokenPrice[element.price]).toFixed(2)
                   : liveTokenPrice && liveTokenPrice[element.price] > 0.1
                   ? parseFloat(liveTokenPrice[element.price]).toFixed(4)
                   : liveTokenPrice && liveTokenPrice[element.price]}
               </span>
 
               <div>
-                <Link href={`/setNotification/${element.symbol}`}>
+                <Link
+                  href={`/setNotification/${element?.symbol}/${
+                    liveTokenPrice && liveTokenPrice[element.price] > 10
+                      ? parseFloat(liveTokenPrice[element.price]).toFixed(2)
+                      : liveTokenPrice && liveTokenPrice[element.price] > 0.1
+                      ? parseFloat(liveTokenPrice[element.price]).toFixed(4)
+                      : (liveTokenPrice && liveTokenPrice[element.price]) || 0
+                  }`}
+                >
                   <Button
                     variant={"primary"}
                     size={"small"}

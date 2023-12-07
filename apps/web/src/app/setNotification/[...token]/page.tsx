@@ -6,7 +6,7 @@ const Token = ({ params }: { params: { token: string } }) => {
     <div className="min-h-[92vh] flex justify-center items-center">
       <div className="md:w-[90%] flex justify-center items-center">
         <div className="w-full md:w-1/2 flex justify-center bg-c_grey rounded-lg dark:bg-c_black py-10">
-          <SetNotification token={params.token} />
+          <SetNotification token={params.token[0]} price={params.token[1]} />
         </div>
       </div>
     </div>

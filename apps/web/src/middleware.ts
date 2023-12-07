@@ -11,7 +11,7 @@ export async function middleware(request: NextRequest) {
   if (publicPath && AuthToken) {
     return NextResponse.redirect(new URL("/", request.url));
   }
-  if (!publicPath && !AuthToken) {
+  if (!AuthToken && !publicPath) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 }
