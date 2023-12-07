@@ -11,8 +11,6 @@ const PriceSocket = () => {
   const [liveTokenPrice, setLiveTokenPrice] = useState();
   const [visibleItems, setVisibleItems] = useState(0);
 
-  console.log("liveTokenPrice", liveTokenPrice);
-
   const nextPage = () => {
     if (visibleItems + 15 < tokenData.length) setVisibleItems(visibleItems + 15);
   };
@@ -29,14 +27,13 @@ const PriceSocket = () => {
   return (
     <div className="min-h-screen w-[90%]">
       {/* Title */}
-
-      {/* card */}
       <div>
         <div className="border-[0.02rem] bg-c_grey py-2 px-3 grid grid-cols-3 mt-10 text-sm font-extrabold text-c_White">
           <div>Name</div>
           <div>Price</div>
           <div>Notification</div>
         </div>
+        {/* card */}
         {tokenData.slice(visibleItems, visibleItems + 15).map((element, key) => {
           return (
             <div key={key} className="border-b-[0.06rem] border-c_grey py-4 md:p-4 grid grid-cols-3">
@@ -51,22 +48,24 @@ const PriceSocket = () => {
 
               <span className="flex items-center text-sm font-semibold">
                 $
-                {(liveTokenPrice && liveTokenPrice[element.price] > 10
+                {liveTokenPrice && liveTokenPrice[element.price] > 10
                   ? parseFloat(liveTokenPrice[element.price]).toFixed(3)
                   : liveTokenPrice && liveTokenPrice[element.price] > 0.1
                   ? parseFloat(liveTokenPrice[element.price]).toFixed(4)
-                  : liveTokenPrice && liveTokenPrice[element.price]) || "0"}
+                  : liveTokenPrice && liveTokenPrice[element.price]}
               </span>
 
               <div>
-                <Button
-                  variant={"primary"}
-                  size={"small"}
-                  className="w-[90%] md:w-[80%] lg:w-[60%] xl:w-[45%]  md:py-2 text-sm font-extrabold"
-                >
-                  <span className="hidden md:inline-block">Create Notification</span>
-                  <span className="inline-block md:hidden">Create</span>
-                </Button>
+                <Link href={`/setNotification/${element.symbol}`}>
+                  <Button
+                    variant={"primary"}
+                    size={"small"}
+                    className="w-[90%] md:w-[80%] lg:w-[60%] xl:w-[45%]  md:py-2 text-sm font-extrabold"
+                  >
+                    <span className="hidden md:inline-block">Create Notification</span>
+                    <span className="inline-block md:hidden">Create</span>
+                  </Button>
+                </Link>
               </div>
             </div>
           );
