@@ -1,4 +1,4 @@
-import { IcreateUser, IloginUser } from "@notifly/lib";
+import { IcreateUser, IloginUser, IGraphQLContext } from "@notifly/lib";
 import AuthService from "../services/auth/authService";
 
 const queries = {
@@ -13,27 +13,31 @@ const queries = {
   },
 };
 const mutations = {
-  createUser: async (_: any, input: IcreateUser, context: any) => {
+  createUser: async (_: any, input: IcreateUser, context: IGraphQLContext) => {
     const user = await AuthService.createUser(input);
     return user;
   },
 
-  loginUser: async (_: any, input: IloginUser, context: any) => {
+  loginUser: async (_: any, input: IloginUser, context: IGraphQLContext) => {
     const response = await AuthService.loginUser(input, context);
     return response;
   },
 
-  userLogout: async (_: any, email: string, context: any) => {
+  userLogout: async (_: any, email: string, context: IGraphQLContext) => {
     const response = await AuthService.UserLogout(context);
     return response;
   },
 
-  googleLogin: async (_: any, input: { email: string; sessionToken?: string }, context: any) => {
+  googleLogin: async (
+    _: any,
+    input: { email: string; sessionToken?: string },
+    context: IGraphQLContext,
+  ) => {
     const response = await AuthService.googleLogin(input, context);
     return response;
   },
 
-  verifyUser: async (_: any, input: { verificationToken: string }, context: any) => {
+  verifyUser: async (_: any, input: { verificationToken: string }, context: IGraphQLContext) => {
     const response = await AuthService.verifyUser(input, context);
     return response;
   },
@@ -42,7 +46,11 @@ const mutations = {
     const response = await AuthService.forgotPassword(email);
     return response;
   },
-  resetPassword: async (_: any, payload: { token: string; newPassword: string }, context: any) => {
+  resetPassword: async (
+    _: any,
+    payload: { token: string; newPassword: string },
+    context: IGraphQLContext,
+  ) => {
     const response = await AuthService.resetPassowrd(payload, context);
     return response;
   },

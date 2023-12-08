@@ -1,17 +1,21 @@
 import { ApolloServer } from "@apollo/server";
 import { Users } from "./users";
+import { Notification } from "./Notifications";
 
 export const server = new ApolloServer({
   typeDefs: `#graphql
 
   ${Users.userTypeDefs}
+  ${Notification.NotificationTypeDefs}
 
         type Query {
           ${Users.userQueries}
+        
         }
 
         type Mutation {
           ${Users.userMutation}
+          ${Notification.NotificationMutation}
         }
         `,
 
@@ -21,6 +25,7 @@ export const server = new ApolloServer({
     },
     Mutation: {
       ...Users.userReslovers.mutations,
+      ...Notification.NotificationResolvers.mutations,
     },
   },
 

@@ -1,19 +1,20 @@
 "use client";
-import { Button, InputBox, Label } from "@notifly/ui";
+
 import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
-import z from "zod";
+import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
+import { writeStorage } from "@rehooks/local-storage";
+import { useEffect } from "react";
+import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@notifly/lib";
 import { useMutation } from "@apollo/client";
+import { Button, InputBox, Label } from "@notifly/ui";
+import { Loader } from "@notifly/ui";
+import z from "zod";
+
 import { LoginUserMutationDocument } from "@/graphql/__generated__/graphql";
-import Loader from "@/lib/Loader";
-import Link from "next/link";
-import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
-import { writeStorage } from "@rehooks/local-storage";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 const LoginForm = () => {
   const router = useRouter();

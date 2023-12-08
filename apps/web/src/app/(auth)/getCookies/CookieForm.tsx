@@ -3,11 +3,12 @@ import { useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
 import { GoogleLoginDocument } from "@/graphql/__generated__/graphql";
 import { useRouter } from "next/navigation";
-import Loader from "@/lib/Loader";
+import { Loader } from "@notifly/ui";
 import { writeStorage, useLocalStorage } from "@rehooks/local-storage";
 
 const CookieForm = () => {
   const { data: session, status } = useSession();
+  console.log("status", status);
   const [googleLogin, { data, loading, error }] = useMutation(GoogleLoginDocument);
   const router = useRouter();
   const [authToken] = useLocalStorage("authToken");
@@ -20,7 +21,7 @@ const CookieForm = () => {
           sessionToken: undefined,
         },
       });
-      if (!loading) {
+      if (!loading && status === "authenticated") {
         writeStorage("authToken", true);
         router.replace("/", { scroll: false });
         router.refresh();

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { forgotPasswordSchema } from "@notifly/lib";
 import { useMutation } from "@apollo/client";
 import { ForgotPasswordMutationDocument } from "@/graphql/__generated__/graphql";
-import Loader from "@/lib/Loader";
+import { Loader } from "@notifly/ui";
 import Link from "next/link";
 
 const ForgotPasswordForm = () => {

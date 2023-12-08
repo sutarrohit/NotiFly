@@ -8,7 +8,5 @@ export const TokenPriceSocket = () => {
     mydata.push(JSON.parse(event.data));
   };
 
-  console.log("mydata", mydata);
-
   socket.close();
 };

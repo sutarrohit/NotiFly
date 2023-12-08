@@ -4,7 +4,7 @@ import { useMutation } from "@apollo/client";
 import { ImCross } from "react-icons/im";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import { VerifyUserDocument } from "@/graphql/__generated__/graphql";
-import Loader from "@/lib/Loader";
+import { Loader } from "@notifly/ui";
 import { Button } from "@notifly/ui";
 import { useRouter } from "next/navigation";
 
@@ -35,7 +35,11 @@ const VeriflyUserForm = ({ params }: { params: { verificationToken: string } }) 
           <div className="flex flex-col gap-4 items-center">
             <IoCheckmarkCircle className="text-[4rem]" />
             {data?.verifyUser?.message}
-            <Button onClick={() => router.replace("/", { scroll: false })} variant={"primary"} size={"small"}>
+            <Button
+              onClick={() => (router.replace("/", { scroll: false }), router.refresh())}
+              variant={"primary"}
+              size={"small"}
+            >
               Back to Home
             </Button>
           </div>

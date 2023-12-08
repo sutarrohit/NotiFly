@@ -1,14 +1,42 @@
 "use client";
 import { useState } from "react";
 import { tokenData } from "@notifly/lib";
+import { useMutation, gql } from "@apollo/client";
+import { ZNotificationTokenPrice } from "@notifly/lib";
+import Loader from "./Loader";
 import Image from "next/image";
 import Button from "./Button";
+
+export const NOTIFICATION = gql`
+  mutation createNotification($token: String, $price: Float, $type: String) {
+    createNotification(token: $token, price: $price, type: $type)
+  }
+`;
 
 const SetNotification = ({ token, price }: { token: string; price: string }) => {
   const tokenObj = tokenData.filter((element) => element.symbol === token);
   const [tokenPrice, setTokenPrice] = useState(price);
+  const [priceError, setPriceError] = useState("");
+  const [createNotification, { data, loading, error }] = useMutation(NOTIFICATION);
 
-  const handleSubmit = () => {};
+  console.log("data", data);
+  console.log("loading", loading);
+  console.log("error", error);
+
+  const handleSubmit = () => {
+    try {
+      ZNotificationTokenPrice.parse(parseFloat(tokenPrice));
+      createNotification({
+        variables: {
+          token: token,
+          price: parseFloat(tokenPrice),
+          type: "Price",
+        },
+      });
+    } catch (error: any) {
+      setPriceError(JSON.parse(error.message)[0].message);
+    }
+  };
 
   return (
     <div className=" text-c_White flex flex-col p-10 justify-center items-center gap-7 border-2 w-full md:w-[80%] backdrop-blur-3xl border-b rounded-xl">
@@ -26,16 +54,22 @@ const SetNotification = ({ token, price }: { token: string; price: string }) => 
         <input
           type="text"
           defaultValue={price}
-          onChange={(e) => setTokenPrice(e.target.value)}
+          onChange={(e) => {
+            setTokenPrice(e.target.value), setPriceError("");
+          }}
           className="bg-transparent rounded-lg border-2 px-6 py-2 w-full md:w-[60%] font-bold mt-1"
         />
+        <p className="text-sm text-c_Orange mt-1 w-full md:w-[60%]">{priceError && priceError}</p>
       </div>
 
       <Button
         variant={"primary"}
         size={"small"}
         className="w-full md:w-[60%] font-bold py-2 bg-c_White text-c_black"
+        disabled={loading}
+        onClick={() => handleSubmit()}
       >
+        {loading && <Loader />}
         Submit
       </Button>
     </div>

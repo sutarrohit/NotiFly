@@ -1,8 +1,9 @@
+import { Request, Response } from "express";
 export interface IcreateUser {
-  userName?: string;
-  email: string;
-  password: string;
+  email?: string | null;
+  password?: string | null;
 }
+
 export interface IloginUser {
   email: string;
   password: string;
@@ -23,4 +24,10 @@ export interface ITokenPrice {
     m: boolean;
     M: boolean;
   };
+}
+
+export interface IGraphQLContext {
+  req: Request;
+  res: Response;
+  authToken: string;
 }

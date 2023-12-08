@@ -76,6 +76,8 @@ export const signupSchemaServer: ZodType<signType> = z.object({
     }),
 });
 
+export const ZNotificationTokenPrice = z.number();
+
 export type forgotPasswordType = {
   email: string;
 };

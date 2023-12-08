@@ -9,7 +9,6 @@ import { IcreateUser, IloginUser } from "@notifly/lib";
 import { loginSchema, signupSchemaServer, customError } from "@notifly/lib";
 import { VerificationMail } from "../../verificationEmail/verification";
 import { PasswordVerificationMail } from "../../verificationEmail/passwordVerification";
-import { promises } from "nodemailer/lib/xoauth2";
 
 class AuthService {
   private static hashPassowrd(password: string) {
@@ -42,7 +41,7 @@ class AuthService {
 
   private static async sendVerificationMail(
     verificationToken: string,
-    user: IcreateUser,
+    user: any,
     url: string,
     subject: string,
   ) {
@@ -74,7 +73,7 @@ class AuthService {
 
   //Get User
   public static getUser(email: string) {
-    return prismaClient.tUser.findUnique({ where: { email: email } });
+    return prismaClient.user.findUnique({ where: { email: email } });
   }
 
   //Sign User
@@ -87,17 +86,14 @@ class AuthService {
       }
 
       const { email, password } = payload;
-      const userName = email.split(".")[0];
 
       const verificationToken = crypto.randomBytes(32).toString("hex");
       const hashedToken = crypto.createHash("sha256").update(verificationToken).digest("hex");
       const now = new Date();
 
-      const hashPassowrd = await this.hashPassowrd(password);
-
-      const newUser = await prismaClient.tUser.create({
+      const hashPassowrd = await this.hashPassowrd(password || "");
+      const newUser = await prismaClient.user.create({
         data: {
-          userName: userName,
           email,
           password: hashPassowrd,
           passwordResetToken: hashedToken,
@@ -132,14 +128,16 @@ class AuthService {
   public static async loginUser(payload: IloginUser, context: any) {
     try {
       const result = loginSchema.safeParse(payload);
+
       if (!result.success) {
         const error: ZodError = result.error;
         throw new GraphQLError(error.errors[0].message);
       }
 
       const { email, password } = payload;
-      const user = await prismaClient.tUser.findUnique({ where: { email: email } });
-      if (!user)
+
+      const user = await prismaClient.user.findUnique({ where: { email: email } });
+      if (!user || !user.password)
         throw new GraphQLError("Invalid email or password", {
           extensions: customError.UNAUTHORIZED,
         });
@@ -151,7 +149,7 @@ class AuthService {
         });
 
       const userType = "EmailAuthentication";
-      const token = this.createJWTToken({ userId: user.id, email: user.email, userType });
+      const token = this.createJWTToken({ userId: user.id, email: user.email || "", userType });
       context.res.cookie("AuthToken", token, {
         httpOnly: true,
         secure: true,
@@ -167,8 +165,8 @@ class AuthService {
   //Forgot Password
   public static async forgotPassword(email: string) {
     try {
-      const user = await prismaClient.tUser.findUnique({ where: { email: email } });
-      if (!user)
+      const user = await prismaClient.user.findUnique({ where: { email: email } });
+      if (!user || !user.password)
         throw new GraphQLError("There in no user with this email", {
           extensions: customError.NOT_FOUND,
         });
@@ -177,7 +175,7 @@ class AuthService {
       const hashedToken = crypto.createHash("sha256").update(verificationToken).digest("hex");
 
       const now = new Date();
-      const userUpdate = await prismaClient.tUser.update({
+      const userUpdate = await prismaClient.user.update({
         where: { email: email },
         data: {
           passwordResetToken: hashedToken,
@@ -197,21 +195,22 @@ class AuthService {
   public static async resetPassowrd(payload: { token: string; newPassword: string }, context: any) {
     try {
       const { token, newPassword } = payload;
+
       const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-      const user = await prismaClient.tUser.findUnique({
+      const user = await prismaClient.user.findUnique({
         where: {
           passwordResetToken: hashedToken,
           passwordResetTokenExpires: { gt: new Date() },
         },
       });
 
-      if (!user)
+      if (!user || !user.password)
         throw new GraphQLError("Token Invalid or Expired", {
           extensions: customError.UNAUTHORIZED,
         });
 
       const hashPassowrd = await this.hashPassowrd(newPassword);
-      await prismaClient.tUser.update({
+      await prismaClient.user.update({
         where: { id: user.id },
         data: {
           password: hashPassowrd,
@@ -222,7 +221,11 @@ class AuthService {
       });
 
       const userType = "EmailAuthentication";
-      const jwtToken = this.createJWTToken({ userId: user.id, email: user.email, userType });
+      const jwtToken = this.createJWTToken({
+        userId: user.id,
+        email: user.email as string,
+        userType,
+      });
       context.res.cookie("AuthToken", jwtToken, {
         httpOnly: true,
         secure: true,
@@ -244,7 +247,7 @@ class AuthService {
       });
 
     const hashedToken = crypto.createHash("sha256").update(input.verificationToken).digest("hex");
-    const user = await prismaClient.tUser.findUnique({
+    const user = await prismaClient.user.findUnique({
       where: {
         passwordResetToken: hashedToken,
         passwordResetTokenExpires: { gt: new Date() },
@@ -256,18 +259,18 @@ class AuthService {
         extensions: customError.UNAUTHORIZED,
       });
 
-    await prismaClient.tUser.update({
+    await prismaClient.user.update({
       where: { id: user.id },
       data: {
         passwordChangedAt: new Date(),
         passwordResetToken: null,
         passwordResetTokenExpires: null,
-        emailVerified: true,
+        userVerified: true,
       },
     });
 
     const userType = "EmailAuthentication";
-    const token = this.createJWTToken({ userId: user.id, email: user.email, userType });
+    const token = this.createJWTToken({ userId: user.id, email: user.email as string, userType });
     context.res.cookie("AuthToken", token, {
       httpOnly: true,
       secure: true,

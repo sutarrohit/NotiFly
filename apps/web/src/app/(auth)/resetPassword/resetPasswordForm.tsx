@@ -1,4 +1,6 @@
 "use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button, InputBox, Label } from "@notifly/ui";
 import z from "zod";
 import { useForm } from "react-hook-form";
@@ -6,11 +8,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { resetPasswordSchema } from "@notifly/lib";
 import { useMutation } from "@apollo/client";
 import { ResetPasswordMutationDocument } from "@/graphql/__generated__/graphql";
-import Loader from "@/lib/Loader";
+import { Loader } from "@notifly/ui";
 
 const ResetPasswordForm = ({ params }: { params: { resetToken: string } }) => {
   const [resetPassword, { data, loading, error }] = useMutation(ResetPasswordMutationDocument);
+  const router = useRouter();
 
+  console.log(data);
   const {
     register,
     handleSubmit,
@@ -25,6 +29,13 @@ const ResetPasswordForm = ({ params }: { params: { resetToken: string } }) => {
       },
     });
   };
+
+  if (data !== undefined) {
+    setTimeout(() => {
+      router.replace("/");
+      router.refresh();
+    }, 3000);
+  }
 
   return (
     <form

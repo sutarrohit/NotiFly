@@ -7,7 +7,7 @@ import { signupSchema } from "@notifly/lib";
 import { FaGoogle } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
 import { SingupUserMutationDocument } from "@/graphql/__generated__/graphql";
-import Loader from "@/lib/Loader";
+import { Loader } from "@notifly/ui";
 import Link from "next/link";
 
 const SignupForm = () => {
