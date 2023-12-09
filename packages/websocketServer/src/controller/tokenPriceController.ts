@@ -26,7 +26,6 @@ export const gettokensPrice = () => {
   };
 
   setInterval(() => {
-    console.log(dataArray);
     pushDataToClients(dataArray);
   }, 1000);
 };

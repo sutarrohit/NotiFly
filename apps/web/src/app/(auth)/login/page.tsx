@@ -1,17 +1,8 @@
 import LoginForm from "./LoginForm";
-import { gql } from "@apollo/client";
-import { getClient } from "@/lib/apolloClient";
+
 import { AnimatedHeader } from "@notifly/ui";
 
-const GET_LOCATIONS = gql`
-  query Query {
-    getUsers(email: "rohit6")
-  }
-`;
-
 const LoginPage = async () => {
-  const { data } = await getClient().query({ query: GET_LOCATIONS });
-
   return (
     <div className="min-h-[92vh] flex justify-center items-center">
       <div className="min-w-[90%] md:border md:border-c_Litegrey rounded-lg grid md:grid-cols-2 h-[85vh] overflow-hidden">

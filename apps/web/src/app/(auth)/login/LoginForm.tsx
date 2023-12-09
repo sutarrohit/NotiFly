@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { writeStorage } from "@rehooks/local-storage";
 import { useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,13 +21,14 @@ const LoginForm = () => {
 
   const handleLogin = () => {
     if (!loading && data) {
-      writeStorage("authToken", true);
       router.replace("/", { scroll: false });
       router.refresh();
     }
   };
   const handleGoogleLogin = async () => {
     const mydata = await signIn("google");
+    if (mydata) {
+    }
   };
 
   const searchParams = useSearchParams();

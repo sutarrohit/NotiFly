@@ -6,4 +6,5 @@ import AnimatedHeader from "./components/AnimatedHeader";
 import Modal from "./components/Modal";
 import SetNotification from "./components/SetNotification";
 import Loader from "./components/Loader";
-export { DarkMode, Button, InputBox, Label, AnimatedHeader, Modal, SetNotification, Loader };
+import MenuButton from "./components/MenuButton";
+export { DarkMode, Button, InputBox, Label, MenuButton, AnimatedHeader, Modal, SetNotification, Loader };

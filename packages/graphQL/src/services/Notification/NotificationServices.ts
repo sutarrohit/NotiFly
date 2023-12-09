@@ -39,7 +39,6 @@ class NotificationService {
 
       return "Notification created successfully.";
     } catch (error) {
-      console.log(error);
       return error;
     }
   }

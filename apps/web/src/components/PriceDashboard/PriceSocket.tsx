@@ -6,10 +6,15 @@ import { useState } from "react";
 import useWebSocket from "react-use-websocket";
 import Link from "next/link";
 import { GrCaretPrevious, GrCaretNext } from "react-icons/gr";
+import { useRef, useCallback, MouseEventHandler } from "react";
+import { useRecoilState } from "recoil";
+import { openSideMenu } from "@notifly/recoil";
 
 const PriceSocket = () => {
   const [liveTokenPrice, setLiveTokenPrice] = useState();
   const [visibleItems, setVisibleItems] = useState(0);
+  const overlay = useRef(null);
+  const [sideMenu, setSideMenu] = useRecoilState(openSideMenu);
 
   const nextPage = () => {
     if (visibleItems + 15 < tokenData.length) setVisibleItems(visibleItems + 15);
@@ -24,12 +29,22 @@ const PriceSocket = () => {
     setLiveTokenPrice(tokenPriceData);
   });
 
+  const onClick: MouseEventHandler = useCallback(
+    (e) => {
+      setSideMenu(false);
+    },
+    [overlay],
+  );
+
   return (
-    <div className="min-h-screen w-[90%]">
+    <div ref={overlay} onClick={onClick} className="min-h-screen w-[90%]">
       {/* Title */}
       <div>
-        <div className="border-[0.02rem] bg-c_grey py-2 px-3 grid grid-cols-3 mt-10 text-sm font-extrabold text-c_White">
-          <div>Name</div>
+        <div className="bg-c_grey py-2 px-3 grid grid-cols-3 mt-10 text-sm font-extrabold text-c_White">
+          <div className="flex gap-8">
+            <div className="hidden md:block ml-4">#</div>
+            <div>Name</div>
+          </div>
           <div>Price</div>
           <div>Notification</div>
         </div>
@@ -38,8 +53,8 @@ const PriceSocket = () => {
           return (
             <div key={key} className="border-b-[0.06rem] border-c_grey py-4 md:p-4 grid grid-cols-3">
               <div className="flex items-center gap-2 md:gap-5">
-                <div className="hidden md:block ml-3 text-sm text-c_Litegrey">{element.id}.</div>
-                <Image src={element.icon} alt="" width="35" height="35" />
+                <div className="hidden md:block ml-3 text-sm text-c_Litegrey">{element.id}</div>
+                <Image src={element.icon} alt="" width="30" height="30" />
                 <div className="flex">
                   <span className="text-sm font-bold">{element.symbol}</span>
                   <span className="hidden md:block ml-3 text-sm text-c_Litegrey">{element.name}</span>
@@ -66,9 +81,9 @@ const PriceSocket = () => {
                   }`}
                 >
                   <Button
-                    variant={"primary"}
+                    variant={"secondary"}
                     size={"small"}
-                    className="w-[90%] md:w-[80%] lg:w-[60%] xl:w-[45%]  md:py-2 text-sm font-extrabold"
+                    className="w-[90%] md:w-[80%] lg:w-[60%] xl:w-[45%] md:py-2 text-sm font-extrabold"
                   >
                     <span className="hidden md:inline-block">Create Notification</span>
                     <span className="inline-block md:hidden">Create</span>

@@ -4,17 +4,14 @@ import { useMutation } from "@apollo/client";
 import { GoogleLoginDocument } from "@/graphql/__generated__/graphql";
 import { useRouter } from "next/navigation";
 import { Loader } from "@notifly/ui";
-import { writeStorage, useLocalStorage } from "@rehooks/local-storage";
 
 const CookieForm = () => {
   const { data: session, status } = useSession();
-  console.log("status", status);
   const [googleLogin, { data, loading, error }] = useMutation(GoogleLoginDocument);
   const router = useRouter();
-  const [authToken] = useLocalStorage("authToken");
 
   useEffect(() => {
-    if (session && session.user && session.user.email && !authToken) {
+    if (session && session.user && session.user.email) {
       googleLogin({
         variables: {
           email: session?.user?.email,
@@ -22,7 +19,6 @@ const CookieForm = () => {
         },
       });
       if (!loading && status === "authenticated") {
-        writeStorage("authToken", true);
         router.replace("/", { scroll: false });
         router.refresh();
       }
@@ -30,8 +26,6 @@ const CookieForm = () => {
   }, [session]);
 
   if (session === null) return <>{(router.replace("/", { scroll: false }), router.refresh())}</>;
-  // if (session && authToken && !loading)
-  //   return <>{(router.replace("/", { scroll: false }), router.refresh())}</>;
 
   return <div className="h-screen flex justify-center items-center">{<Loader />}</div>;
 };

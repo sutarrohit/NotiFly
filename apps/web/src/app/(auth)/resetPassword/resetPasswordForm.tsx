@@ -13,8 +13,6 @@ import { Loader } from "@notifly/ui";
 const ResetPasswordForm = ({ params }: { params: { resetToken: string } }) => {
   const [resetPassword, { data, loading, error }] = useMutation(ResetPasswordMutationDocument);
   const router = useRouter();
-
-  console.log(data);
   const {
     register,
     handleSubmit,
