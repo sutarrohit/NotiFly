@@ -5,7 +5,7 @@ import { pushDataToClients } from "./serverController";
 
 export let dataArray: any = {};
 
-export const gettokensPrice = () => {
+export const getTokensPrice = () => {
   const binanceSocket = new WebSocket(`wss://stream.binance.com:9443/stream?streams=${tokenSet1}`);
 
   binanceSocket.on("open", () => {
@@ -26,6 +26,7 @@ export const gettokensPrice = () => {
   };
 
   setInterval(() => {
+    console.log(dataArray);
     pushDataToClients(dataArray);
   }, 1000);
 };

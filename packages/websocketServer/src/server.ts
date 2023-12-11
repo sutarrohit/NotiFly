@@ -2,7 +2,7 @@ import express from "express";
 import { WebSocketServer, WebSocket } from "ws";
 import cors from "cors";
 import { onSocketPreError, onSocketPostError } from "./controller/serverController";
-import { gettokensPrice } from "./controller/tokenPriceController";
+import { getTokensPrice } from "./controller/tokenPriceController";
 
 const PORT = 1337;
 const app = express();
@@ -12,7 +12,7 @@ let wss: WebSocketServer;
 export function startServer() {
   const server = app.listen(PORT, () => {
     console.log("WebSocket Running on port", PORT);
-    gettokensPrice();
+    getTokensPrice();
   });
 
   wss = new WebSocketServer({ noServer: true });

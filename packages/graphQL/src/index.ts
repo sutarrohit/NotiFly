@@ -10,6 +10,7 @@ export const server = new ApolloServer({
 
         type Query {
           ${Users.userQueries}
+          ${Notification.NotificationsQueries}
         
         }
 
@@ -22,6 +23,7 @@ export const server = new ApolloServer({
   resolvers: {
     Query: {
       ...Users.userReslovers.queries,
+      ...Notification.NotificationResolvers.queries,
     },
     Mutation: {
       ...Users.userReslovers.mutations,

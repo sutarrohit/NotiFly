@@ -27,9 +27,12 @@ const SetNotification = ({ token, price }: { token: string; price: string }) => 
   const handleSubmit = () => {
     try {
       ZNotificationTokenPrice.parse(parseFloat(tokenPrice));
+
+      const tokenPair = token + "USDT";
+
       createNotification({
         variables: {
-          token: token,
+          token: tokenPair,
           price: parseFloat(tokenPrice),
           type: "Price",
         },
@@ -53,7 +56,7 @@ const SetNotification = ({ token, price }: { token: string; price: string }) => 
   }, [data, error]);
   return (
     <div className="relative text-c_White flex flex-col p-10 justify-center items-center gap-7 border-2 w-full md:w-[70%] backdrop-blur-3xl border-b rounded-xl">
-      <div onClick={() => router.back()} className="absolute text-2xl top-2 right-4">
+      <div onClick={() => router.back()} className="absolute cursor-pointer text-2xl top-2 right-4">
         <FaWindowClose />
       </div>
       <h1 className="font-extrabold text-2xl mb-4">Set Notification</h1>

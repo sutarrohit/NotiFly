@@ -2,6 +2,7 @@ import { customError, IcreateNotification, IGraphQLContext } from "@notifly/lib"
 import jwt from "jsonwebtoken";
 import { prismaClient } from "@notifly/prisma";
 import { GraphQLError } from "graphql";
+import { NOTIFICATION } from "@notifly/ui/components/SetNotification";
 
 class NotificationService {
   public static async createNotification(input: IcreateNotification, context: IGraphQLContext) {
@@ -40,6 +41,40 @@ class NotificationService {
       return "Notification created successfully.";
     } catch (error) {
       return error;
+    }
+  }
+
+  public static async getAllNotification() {
+    try {
+      const notifications: any = await prismaClient.notifications.findMany({
+        select: {
+          token: true,
+          targetPrice: true,
+        },
+      });
+
+      type NotificationTokenSet = {
+        [token: string]: number[];
+      };
+
+      const tokenPrices: NotificationTokenSet = notifications.reduce(
+        (result: any, notification: any) => {
+          const { token, targetPrice } = notification;
+
+          if (!result[token]) {
+            result[token] = [];
+          }
+          if (!result[token].includes(targetPrice)) {
+            result[token].push(targetPrice);
+          }
+          return result;
+        },
+        {},
+      );
+      console.log("NOTIFICATION", tokenPrices);
+      return tokenPrices;
+    } catch (error) {
+      console.log(error);
     }
   }
 }
