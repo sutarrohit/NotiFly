@@ -1,3 +1,4 @@
 export const NotificationsQueries = `#graphql
-getAllNotifications: TokenPrices
+
+getAllNotifications: [NotificationData!]!
 `;

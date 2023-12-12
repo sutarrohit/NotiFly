@@ -1,8 +1,12 @@
-import { customError, IcreateNotification, IGraphQLContext } from "@notifly/lib";
+import {
+  customError,
+  IcreateNotification,
+  IGraphQLContext,
+  IsendNotificationToQueue,
+} from "@notifly/lib";
 import jwt from "jsonwebtoken";
 import { prismaClient } from "@notifly/prisma";
 import { GraphQLError } from "graphql";
-import { NOTIFICATION } from "@notifly/ui/components/SetNotification";
 
 class NotificationService {
   public static async createNotification(input: IcreateNotification, context: IGraphQLContext) {
@@ -30,6 +34,7 @@ class NotificationService {
           receiverEmail: user.email as string,
           CreatedAt: new Date(),
           notificationType: "Price",
+          uptrend: input.upTrend,
         },
       });
 
@@ -47,34 +52,71 @@ class NotificationService {
   public static async getAllNotification() {
     try {
       const notifications: any = await prismaClient.notifications.findMany({
+        where: {
+          active: true,
+        },
         select: {
           token: true,
           targetPrice: true,
+          uptrend: true,
         },
       });
 
-      type NotificationTokenSet = {
-        [token: string]: number[];
-      };
+      const uniqueNotifications = notifications.reduce((result: any, notification: any) => {
+        const { token, targetPrice, uptrend } = notification;
 
-      const tokenPrices: NotificationTokenSet = notifications.reduce(
-        (result: any, notification: any) => {
-          const { token, targetPrice } = notification;
+        const existingEntry = result.find(
+          (item: any) => item.token === token && item.uptrend === uptrend,
+        );
 
-          if (!result[token]) {
-            result[token] = [];
-          }
-          if (!result[token].includes(targetPrice)) {
-            result[token].push(targetPrice);
-          }
-          return result;
-        },
-        {},
-      );
-      console.log("NOTIFICATION", tokenPrices);
-      return tokenPrices;
+        if (existingEntry) {
+          existingEntry.targetPrice.push(targetPrice);
+        } else {
+          result.push({
+            token,
+            targetPrice: [targetPrice],
+            uptrend,
+          });
+        }
+
+        return result;
+      }, []);
+
+      console.log("uniqueNotificationsArray", uniqueNotifications);
+      return uniqueNotifications;
     } catch (error) {
       console.log(error);
+      return null;
+    }
+  }
+
+  public static async sendNotificationToQueue(input: IsendNotificationToQueue) {
+    try {
+      const notifications = await prismaClient.notifications.findMany({
+        where: {
+          token: input.token,
+          active: true,
+          targetPrice: {
+            in: input.prices,
+          },
+        },
+      });
+      // const notificationIds = notifications.map((notification) => notification.id);
+      // const updatedNotifications = await prismaClient.notifications.updateMany({
+      //   where: {
+      //     id: {
+      //       in: notificationIds,
+      //     },
+      //   },
+      //   data: {
+      //     active: false,
+      //   },
+      // });
+
+      return notifications;
+    } catch (error) {
+      console.log(error);
+      return error;
     }
   }
 }

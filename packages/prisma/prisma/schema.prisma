@@ -79,6 +79,7 @@ model Notifications {
   active           Boolean            @default(true)
   receiverEmail    String
   CreatedAt        DateTime
+  uptrend          Boolean
   notificationType NotificationsType?
   DeliveredAt      DateTime?
 

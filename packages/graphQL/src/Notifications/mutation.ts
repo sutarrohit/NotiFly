@@ -1,3 +1,4 @@
 export const NotificationMutation = `#graphql
-createNotification(token:String, price:Float, type:String):String
+createNotification(token:String, price:Float, type:String, upTrend:Boolean):String
+sendNotificationToQueue(token:String, prices:[Float]):[SendNotificationToQueue]
 `;

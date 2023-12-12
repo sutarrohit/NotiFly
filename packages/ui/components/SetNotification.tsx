@@ -11,8 +11,8 @@ import { toast } from "react-toastify";
 import { FaWindowClose } from "react-icons/fa";
 
 export const NOTIFICATION = gql`
-  mutation createNotification($token: String, $price: Float, $type: String) {
-    createNotification(token: $token, price: $price, type: $type)
+  mutation createNotification($token: String, $price: Float, $type: String, $upTrend: Boolean) {
+    createNotification(token: $token, price: $price, type: $type, upTrend: $upTrend)
   }
 `;
 
@@ -29,12 +29,14 @@ const SetNotification = ({ token, price }: { token: string; price: string }) => 
       ZNotificationTokenPrice.parse(parseFloat(tokenPrice));
 
       const tokenPair = token + "USDT";
+      const UpTrend = price ? price <= tokenPrice : false;
 
       createNotification({
         variables: {
           token: tokenPair,
           price: parseFloat(tokenPrice),
           type: "Price",
+          upTrend: UpTrend,
         },
       });
     } catch (error: any) {
