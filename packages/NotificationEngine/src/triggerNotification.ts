@@ -54,8 +54,9 @@ function checkPrice() {
 
         if (pricesAboveLivePrice.length !== 0) {
           console.log("trigged sendNotificationFunction...");
-          triggredNotification(token, pricesAboveLivePrice);
+
           tokenData.targetPrice = tokenData.targetPrice.filter((price: any) => price > livePrice);
+          triggredNotification(token, pricesAboveLivePrice);
         }
       }
       if (!uptrend) {
@@ -68,8 +69,8 @@ function checkPrice() {
         const pricesBelowLivePrice = targetPrice.filter((price: any) => price >= livePrice);
         if (pricesBelowLivePrice.length !== 0) {
           console.log("trigged sendNotificationFunction...");
-          triggredNotification(token, pricesBelowLivePrice);
           tokenData.targetPrice = tokenData.targetPrice.filter((price: any) => price < livePrice);
+          triggredNotification(token, pricesBelowLivePrice);
         }
       }
     });
