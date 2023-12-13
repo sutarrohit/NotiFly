@@ -46,6 +46,7 @@ function checkPrice() {
       if (uptrend) {
         console.log("uptrend==========================================");
         console.log(token, targetPrice);
+        console.log("livePrice", livePrice);
         // console.log("uptrendToken", token);
         // console.log("uptrendPrice", targetPrice);
         // console.log("uptrendLivePrice", livePrice);
@@ -60,6 +61,7 @@ function checkPrice() {
       if (!uptrend) {
         console.log("DownTrend================================================");
         console.log(token, targetPrice);
+        console.log("livePrice", livePrice);
         // console.log("DownToken", token);
         // console.log("DownPrice", targetPrice);
         // console.log("DownPrice", livePrice);
