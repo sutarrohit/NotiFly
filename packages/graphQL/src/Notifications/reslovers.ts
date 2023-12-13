@@ -15,7 +15,6 @@ export const mutations = {
 
   sendNotificationToQueue: async (_: any, input: IsendNotificationToQueue) => {
     const response = await NotificationServices.sendNotificationToQueue(input);
-    console.log("response", response);
     return response;
   },
 };

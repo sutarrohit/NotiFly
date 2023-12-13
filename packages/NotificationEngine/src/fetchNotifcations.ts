@@ -12,7 +12,7 @@ query {
 export let NotificationArray: any;
 
 export async function getNotificationData() {
-  console.log("this is my getNotificationData");
+  console.log("Fetching Notification Data.......");
 
   axios
     .post(graphqlEndpoint, {
@@ -35,7 +35,6 @@ export function fetchNotificationData() {
   flag = false;
 
   setInterval(() => {
-    console.log("gsadfsdfdfsdfd", flag);
     getNotificationData();
   }, 30000);
 }

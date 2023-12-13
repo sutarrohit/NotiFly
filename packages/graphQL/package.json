@@ -19,7 +19,8 @@
     "graphql": "^16.8.1",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.4",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "redis": "^4.6.11"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

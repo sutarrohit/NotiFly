@@ -1,11 +1,10 @@
 import { dataArray, fetchTokenPrice } from "./priceEngine";
 import { fetchNotificationData, NotificationArray } from "./fetchNotifcations";
+import { sendNotifcationToQueue } from "./sendNotification";
 
 type TokenData = {
   [tokenSymbol: string]: string[];
 };
-
-let data: TokenData[];
 
 const myTokenData = [
   {
@@ -25,87 +24,65 @@ const myTokenData = [
   },
 ];
 
-function isCryptoObjectWithArray(obj: any): obj is { [key: string]: string[] } {
-  return typeof obj === "object" && Array.isArray(obj[Object.keys(obj)[0]]);
-}
-
-// async function checkPrice() {
-//   if (!NotificationArray) {
-//     console.error("NotificationArray is undefined.");
-//     return false;
-//   }
-
-//   if (!dataArray) {
-//     console.error("dataArray undefined.");
-//     return false;
-//   }
-
-//   NotificationArray?.forEach((tokenData: any) => {
-//     const { token, targetPrice, uptrend } = tokenData;
-
-//     // console.log("token", token);
-//     // console.log("targetPrice", targetPrice);
-//     const livePrice = parseFloat(dataArray[token]);
-//     // console.log("livePrice", livePrice);
-
-//     if (uptrend) {
-//       console.log("upstream=======");
-//       const pricesAboveLivePrice = targetPrice.filter((price: any) => price > livePrice);
-//       if (pricesAboveLivePrice !== 0) triggredNotification(token, pricesAboveLivePrice);
-//     }
-//     if (!uptrend) {
-//       console.log("Down======");
-//       const pricesBelowLivePrice = targetPrice.filter((price: any) => price < livePrice);
-//       if (pricesBelowLivePrice.length !== 0) triggredNotification(token, pricesBelowLivePrice);
-//     }
-//   });
-//   console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++");
-//   return true;
-// }
 function checkPrice() {
-  if (!NotificationArray) {
-    console.error("NotificationArray is undefined.");
-    return false;
-  }
-
-  if (!dataArray) {
-    console.error("dataArray undefined.");
-    return false;
-  }
-
-  console.log("00000000000000000000", NotificationArray);
-
-  NotificationArray?.forEach((tokenData: any) => {
-    const { token, targetPrice, uptrend } = tokenData;
-
-    // console.log("token", token);
-    // console.log("targetPrice", targetPrice);
-    const livePrice = parseFloat(dataArray[token]);
-    // console.log("livePrice", livePrice);
-
-    if (uptrend) {
-      console.log("upstream=======");
-      const pricesAboveLivePrice = targetPrice.filter((price: any) => price >= livePrice);
-      if (pricesAboveLivePrice.length !== 0) {
-        triggredNotification(token, pricesAboveLivePrice);
-        tokenData.targetPrice = tokenData.targetPrice.filter((price: any) => price <= livePrice);
-      }
-    } else {
-      console.log("Down======");
-      const pricesBelowLivePrice = targetPrice.filter((price: any) => price <= livePrice);
-      if (pricesBelowLivePrice.length !== 0) {
-        triggredNotification(token, pricesBelowLivePrice);
-        tokenData.targetPrice = tokenData.targetPrice.filter((price: any) => price >= livePrice);
-      }
+  try {
+    if (!NotificationArray) {
+      console.error("NotificationArray is undefined.");
+      return false;
     }
-  });
 
-  console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++");
-  return true;
+    if (!dataArray) {
+      console.error("dataArray undefined.");
+      return false;
+    }
+    NotificationArray?.forEach((tokenData: any) => {
+      const { token, targetPrice, uptrend } = tokenData;
+
+      // console.log("token", token);
+      // console.log("targetPrice", targetPrice);
+      const livePrice = parseFloat(dataArray[token]);
+      // console.log("livePrice", livePrice);
+
+      if (uptrend) {
+        console.log("uptrend==========================================");
+        console.log(token, targetPrice);
+        // console.log("uptrendToken", token);
+        // console.log("uptrendPrice", targetPrice);
+        // console.log("uptrendLivePrice", livePrice);
+        const pricesAboveLivePrice = targetPrice.filter((price: any) => price <= livePrice);
+
+        if (pricesAboveLivePrice.length !== 0) {
+          console.log("trigged sendNotificationFunction...");
+          triggredNotification(token, pricesAboveLivePrice);
+          tokenData.targetPrice = tokenData.targetPrice.filter((price: any) => price > livePrice);
+        }
+      }
+      if (!uptrend) {
+        console.log("DownTrend================================================");
+        console.log(token, targetPrice);
+        // console.log("DownToken", token);
+        // console.log("DownPrice", targetPrice);
+        // console.log("DownPrice", livePrice);
+        const pricesBelowLivePrice = targetPrice.filter((price: any) => price >= livePrice);
+        if (pricesBelowLivePrice.length !== 0) {
+          console.log("trigged sendNotificationFunction...");
+          triggredNotification(token, pricesBelowLivePrice);
+          tokenData.targetPrice = tokenData.targetPrice.filter((price: any) => price < livePrice);
+        }
+      }
+    });
+
+    console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++");
+    return true;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-async function triggredNotification(tokenName: string, price: number) {
-  console.log("triggred notification for price", tokenName, price);
+async function triggredNotification(tokenName: string, prices: number[]) {
+  console.log("tokenName................", tokenName);
+  console.log("prices......------------.", prices);
+  sendNotifcationToQueue(tokenName, prices);
 }
 
 async function myloop() {

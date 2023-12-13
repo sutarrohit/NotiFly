@@ -7,6 +7,8 @@ import {
 import jwt from "jsonwebtoken";
 import { prismaClient } from "@notifly/prisma";
 import { GraphQLError } from "graphql";
+import { createClient } from "redis";
+import e from "cors";
 
 class NotificationService {
   public static async createNotification(input: IcreateNotification, context: IGraphQLContext) {
@@ -81,8 +83,6 @@ class NotificationService {
 
         return result;
       }, []);
-
-      console.log("uniqueNotificationsArray", uniqueNotifications);
       return uniqueNotifications;
     } catch (error) {
       console.log(error);
@@ -90,6 +90,20 @@ class NotificationService {
     }
   }
 
+  private static async sendNotificationsToRedis(notifications: any) {
+    try {
+      const client = await createClient()
+        .on("error", (err) => console.log("Redis Client Error", err))
+        .connect();
+
+      notifications.forEach(async (element: any) => {
+        const queueData = await client.lPush("NotificationQueue", JSON.stringify(element));
+        console.log("data", queueData);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
   public static async sendNotificationToQueue(input: IsendNotificationToQueue) {
     try {
       const notifications = await prismaClient.notifications.findMany({
@@ -101,18 +115,21 @@ class NotificationService {
           },
         },
       });
-      // const notificationIds = notifications.map((notification) => notification.id);
-      // const updatedNotifications = await prismaClient.notifications.updateMany({
-      //   where: {
-      //     id: {
-      //       in: notificationIds,
-      //     },
-      //   },
-      //   data: {
-      //     active: false,
-      //   },
-      // });
 
+      await this.sendNotificationsToRedis(notifications);
+
+      const notificationIds = notifications.map((notification) => notification.id);
+
+      const updatedNotifications = await prismaClient.notifications.updateMany({
+        where: {
+          id: {
+            in: notificationIds,
+          },
+        },
+        data: {
+          active: false,
+        },
+      });
       return notifications;
     } catch (error) {
       console.log(error);
