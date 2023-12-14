@@ -5,25 +5,6 @@ import { sendNotifcationToQueue } from "./sendNotification";
 type TokenData = {
   [tokenSymbol: string]: string[];
 };
-
-const myTokenData = [
-  {
-    token: "BNBUSDT",
-    targetPrice: [255, 280.9, 220.9, 253.3],
-    uptrend: true,
-  },
-  {
-    token: "SOLUSDT",
-    targetPrice: [79.74, 69.74, 220.9, 291.9],
-    uptrend: true,
-  },
-  {
-    token: "ETHUSDT",
-    targetPrice: [2239.84, 22279.11],
-    uptrend: true,
-  },
-];
-
 function checkPrice() {
   try {
     if (!NotificationArray) {

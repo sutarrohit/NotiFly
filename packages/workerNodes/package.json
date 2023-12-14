@@ -1,0 +1,10 @@
+{
+  "name": "@notifly/workerserver",
+  "version": "1.0.0",
+  "main": "src/fetchNotificationFromQueue.ts",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon src/fetchNotificationFromQueue.ts"
+  }
+}

@@ -36,7 +36,7 @@ const SidebarForm = ({ token }: { token: string }) => {
     <div>
       <div
         className={`md:hidden fixed top-0 bottom-0 w-[80%] sm:w-1/2 z-20  bg-c_black text-c_White dark:bg-c_grey opacity-[97%]  ${
-          sideMenu ? "translate-x-[0px]" : "translate-x-[-400px]"
+          sideMenu ? "translate-x-[0px]" : "translate-x-[-450px]"
         } transition ease-in-out duration-700
       `}
       >
@@ -58,10 +58,38 @@ const SidebarForm = ({ token }: { token: string }) => {
         </div>
 
         <div className="flex flex-col justify-center items-center font-semibold mt-5 py-2 gap-3">
-          <Link href="/">My Notification</Link>
-          <Link href="/">Home</Link>
-          <Link href="/">About</Link>
-          <Link href="/">Contact us</Link>
+          <Link
+            onClick={() => {
+              setSideMenu(!sideMenu);
+            }}
+            href="/myNotification"
+          >
+            My Notification
+          </Link>
+          <Link
+            onClick={() => {
+              setSideMenu(!sideMenu);
+            }}
+            href="/"
+          >
+            Home
+          </Link>
+          <Link
+            onClick={() => {
+              setSideMenu(!sideMenu);
+            }}
+            href="/"
+          >
+            About
+          </Link>
+          <Link
+            onClick={() => {
+              setSideMenu(!sideMenu);
+            }}
+            href="/"
+          >
+            Contact us
+          </Link>
         </div>
 
         <div className="flex flex-col mt-7 gap-5 items-center">

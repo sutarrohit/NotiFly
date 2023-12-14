@@ -3,20 +3,26 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const publicPath =
-    path === "/login" || "/signup" || "/forgotPassword" || "/getCookies" || "/resetPassword" || "/verifyUser";
 
   const AuthToken = request.cookies.get("AuthToken")?.value || "";
 
+  const publicPath =
+    request.nextUrl.pathname.startsWith("/login") ||
+    request.nextUrl.pathname.startsWith("/signup") ||
+    request.nextUrl.pathname.startsWith("/forgotPassword") ||
+    request.nextUrl.pathname.startsWith("/getCookies");
+  request.nextUrl.pathname.startsWith("/resetPassword") || request.nextUrl.pathname.startsWith("/verifyUser");
   if (publicPath && AuthToken) {
     return NextResponse.redirect(new URL("/", request.url));
   }
-  if (!AuthToken && !publicPath) {
-    return NextResponse.redirect(new URL("/login", request.url));
+
+  const privatePath =
+    request.nextUrl.pathname.startsWith("/setNotification") ||
+    request.nextUrl.pathname.startsWith("/myNotification");
+  if (!AuthToken && privatePath) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 }
-
-// See "Matching Paths" below to learn more
 export const config = {
   matcher: [
     "/login",
@@ -25,5 +31,7 @@ export const config = {
     "/getCookies",
     "/verifyUser/:path*",
     "/resetPassword/:path*",
+    "/setNotification/:path*",
+    "/myNotification/:path*",
   ],
 };

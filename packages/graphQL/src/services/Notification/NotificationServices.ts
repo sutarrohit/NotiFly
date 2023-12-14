@@ -8,9 +8,22 @@ import jwt from "jsonwebtoken";
 import { prismaClient } from "@notifly/prisma";
 import { GraphQLError } from "graphql";
 import { createClient } from "redis";
-import e from "cors";
 
 class NotificationService {
+  private static async sendNotificationsToRedis(notifications: any) {
+    try {
+      const client = await createClient()
+        .on("error", (err) => console.log("Redis Client Error", err))
+        .connect();
+
+      notifications.forEach(async (element: any) => {
+        const queueData = await client.rPush("NotificationQueue", JSON.stringify(element));
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   public static async createNotification(input: IcreateNotification, context: IGraphQLContext) {
     try {
       if (!context.authToken || !input.price)
@@ -90,20 +103,26 @@ class NotificationService {
     }
   }
 
-  private static async sendNotificationsToRedis(notifications: any) {
+  public static async getUserNotification(context: IGraphQLContext) {
     try {
-      const client = await createClient()
-        .on("error", (err) => console.log("Redis Client Error", err))
-        .connect();
+      if (!context.authToken)
+        throw new GraphQLError("UNAUTHORIZED", {
+          extensions: customError.UNAUTHORIZED,
+        });
 
-      notifications.forEach(async (element: any) => {
-        const queueData = await client.lPush("NotificationQueue", JSON.stringify(element));
-        console.log("data", queueData);
+      const decodedToken: any = jwt.verify(context.authToken, process.env.JWT_SECRET_KEY as string);
+
+      const notification = await prismaClient.notifications.findMany({
+        where: {
+          userId: decodedToken.userId,
+        },
       });
+      return notification;
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
+
   public static async sendNotificationToQueue(input: IsendNotificationToQueue) {
     try {
       const notifications = await prismaClient.notifications.findMany({
@@ -134,6 +153,27 @@ class NotificationService {
     } catch (error) {
       console.log(error);
       return error;
+    }
+  }
+  public static async updateNotificationDeliveredTime(
+    deliveredNotifications: string[],
+    context: IGraphQLContext,
+  ) {
+    try {
+      const updatedNotifications = await prismaClient.notifications.updateMany({
+        where: {
+          id: {
+            in: deliveredNotifications,
+          },
+        },
+        data: {
+          DeliveredAt: new Date(),
+        },
+      });
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
     }
   }
 }

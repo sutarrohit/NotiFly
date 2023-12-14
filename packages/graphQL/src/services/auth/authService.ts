@@ -7,8 +7,8 @@ import { GraphQLError } from "graphql";
 import { ZodError } from "zod";
 import { IcreateUser, IloginUser } from "@notifly/lib";
 import { loginSchema, signupSchemaServer, customError } from "@notifly/lib";
-import { VerificationMail } from "../../verificationEmail/verification";
 import { PasswordVerificationMail } from "../../verificationEmail/passwordVerification";
+import { VerificationMail } from "../../verificationEmail/verification";
 
 class AuthService {
   private static hashPassowrd(password: string) {

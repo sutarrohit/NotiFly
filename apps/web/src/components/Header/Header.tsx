@@ -24,6 +24,12 @@ const Header = async () => {
 
         {/* Right Side */}
         <div className="flex gap-3 items-center">
+          <div className="hidden md:flex gap-5 mr-20 font-semibold">
+            {token && <Link href="/myNotification">MyNotification</Link>}
+            <Link href="/myNotification">About</Link>
+            <Link href="/myNotification">Contact us</Link>
+          </div>
+
           <div className="hidden md:flex">
             <HeaderButton token={token} />
           </div>

@@ -5,3 +5,19 @@ export const verifyJWT = gql`
     verifyJWT(token: $token)
   }
 `;
+
+export const getUsetNotification = gql`
+  query GetUserNotification {
+    getUserNotification {
+      userId
+      token
+      targetPrice
+      notificationType
+      receiverEmail
+      id
+      active
+      CreatedAt
+      DeliveredAt
+    }
+  }
+`;

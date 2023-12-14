@@ -43,10 +43,10 @@ const PriceSocket = () => {
         <div className="bg-c_grey py-2 px-3 grid grid-cols-3 mt-10 text-sm font-extrabold text-c_White">
           <div className="flex gap-8">
             <div className="hidden md:block ml-4">#</div>
-            <div>Name</div>
+            <div className="md:ml-5">Name</div>
           </div>
-          <div>Price</div>
-          <div>Notification</div>
+          <div className="md:ml-4">Price</div>
+          <div className="md:ml-10">Notification</div>
         </div>
         {/* card */}
         {tokenData.slice(visibleItems, visibleItems + 15).map((element, key) => {
@@ -54,7 +54,7 @@ const PriceSocket = () => {
             <div key={key} className="border-b-[0.06rem] border-c_grey py-4 md:p-4 grid grid-cols-3">
               <div className="flex items-center gap-2 md:gap-5">
                 <div className="hidden md:block ml-3 text-sm text-c_Litegrey">{element.id}</div>
-                <Image src={element.icon} alt="" width="30" height="30" />
+                <Image src={element.icon} alt={element.symbol} width="30" height="30" />
                 <div className="flex">
                   <span className="text-sm font-bold">{element.symbol}</span>
                   <span className="hidden md:block ml-3 text-sm text-c_Litegrey">{element.name}</span>
