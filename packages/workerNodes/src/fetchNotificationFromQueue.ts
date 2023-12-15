@@ -1,5 +1,7 @@
 import { createClient } from "redis";
 import { sendNotifcationMail } from "./sendNotifcationMail";
+import dotenv from "dotenv";
+dotenv.config();
 
 async function fetchNotificationFromRedisQueue() {
   try {
@@ -9,13 +11,13 @@ async function fetchNotificationFromRedisQueue() {
 
     const notifications = await client.lRange("NotificationQueue", 0, 2);
     const parsedNotifications = notifications.map((element) => JSON.parse(element));
-    console.log("notifications..s", notifications);
+    console.log("Notification array", notifications);
     if (parsedNotifications.length !== 0) {
       await sendNotifcationMail(parsedNotifications);
     }
     parsedNotifications.forEach(async () => {
-      const a = await client.lPop("NotificationQueue");
-      console.log("----------a", a);
+      const deletedNotification = await client.lPop("NotificationQueue");
+      console.log("deletedNotification", deletedNotification);
     });
 
     client.quit();

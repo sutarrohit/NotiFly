@@ -18,15 +18,25 @@ const mutation = `
 `;
 export function sendNotifcationToQueue(token: String, prices: number[]) {
   try {
+    const cookies = `AuthToken=${process.env.SERVER_COOKIES}`;
     const variables = {
       token: token,
       prices: prices,
     };
     axios
-      .post(graphqlEndpoint, {
-        query: mutation,
-        variables: variables,
-      })
+      .post(
+        graphqlEndpoint,
+        {
+          query: mutation,
+          variables: variables,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Cookie: cookies,
+          },
+        },
+      )
       .then((response) => {
         console.log("response.......", response.data.data.sendNotificationToQueue);
       })

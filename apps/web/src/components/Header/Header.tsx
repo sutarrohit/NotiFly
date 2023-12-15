@@ -26,8 +26,8 @@ const Header = async () => {
         <div className="flex gap-3 items-center">
           <div className="hidden md:flex gap-5 mr-20 font-semibold">
             {token && <Link href="/myNotification">MyNotification</Link>}
-            <Link href="/myNotification">About</Link>
-            <Link href="/myNotification">Contact us</Link>
+            <Link href="/about">About</Link>
+            <Link href="/contactus">Contact us</Link>
           </div>
 
           <div className="hidden md:flex">

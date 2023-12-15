@@ -10,6 +10,18 @@ import { GraphQLError } from "graphql";
 import { createClient } from "redis";
 
 class NotificationService {
+  private static verifyServerJWT(token: string) {
+    const secretKey = process.env.SERVER_JWT_SECRET_KET || "";
+    return new Promise((resolve, rejected) => {
+      jwt.verify(token, secretKey, (err, decoded) => {
+        if (!err) {
+          resolve(true);
+        }
+        resolve(false);
+      });
+    });
+  }
+
   private static async sendNotificationsToRedis(notifications: any) {
     try {
       const client = await createClient()
@@ -21,6 +33,7 @@ class NotificationService {
       });
     } catch (error) {
       console.log(error);
+      return error;
     }
   }
 
@@ -60,12 +73,19 @@ class NotificationService {
 
       return "Notification created successfully.";
     } catch (error) {
+      console.log(error);
       return error;
     }
   }
 
-  public static async getAllNotification() {
+  public static async getAllNotification(context: IGraphQLContext) {
     try {
+      const auth = await NotificationService.verifyServerJWT(context.authToken);
+      if (!auth)
+        throw new GraphQLError("UNAUTHORIZED", {
+          extensions: customError.UNAUTHORIZED,
+        });
+
       const notifications: any = await prismaClient.notifications.findMany({
         where: {
           active: true,
@@ -99,7 +119,7 @@ class NotificationService {
       return uniqueNotifications;
     } catch (error) {
       console.log(error);
-      return null;
+      return error;
     }
   }
 
@@ -123,8 +143,17 @@ class NotificationService {
     }
   }
 
-  public static async sendNotificationToQueue(input: IsendNotificationToQueue) {
+  public static async sendNotificationToQueue(
+    input: IsendNotificationToQueue,
+    context: IGraphQLContext,
+  ) {
     try {
+      const auth = await NotificationService.verifyServerJWT(context.authToken);
+      if (!auth)
+        throw new GraphQLError("UNAUTHORIZED", {
+          extensions: customError.UNAUTHORIZED,
+        });
+
       const notifications = await prismaClient.notifications.findMany({
         where: {
           token: input.token,
@@ -138,7 +167,6 @@ class NotificationService {
       await this.sendNotificationsToRedis(notifications);
 
       const notificationIds = notifications.map((notification) => notification.id);
-
       const updatedNotifications = await prismaClient.notifications.updateMany({
         where: {
           id: {
@@ -160,6 +188,12 @@ class NotificationService {
     context: IGraphQLContext,
   ) {
     try {
+      const auth = await NotificationService.verifyServerJWT(context.authToken);
+      if (!auth)
+        throw new GraphQLError("UNAUTHORIZED", {
+          extensions: customError.UNAUTHORIZED,
+        });
+
       const updatedNotifications = await prismaClient.notifications.updateMany({
         where: {
           id: {
@@ -173,7 +207,7 @@ class NotificationService {
       return true;
     } catch (error) {
       console.log(error);
-      return false;
+      return error;
     }
   }
 }

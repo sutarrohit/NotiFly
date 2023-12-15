@@ -6,7 +6,6 @@ import Image from "next/image";
 
 const MyNotificationForm = () => {
   const { loading, error, data } = useQuery(GetUserNotificationDocument);
-  console.log(data?.getUserNotification);
 
   const sortedNotifications = data?.getUserNotification
     ? [...data.getUserNotification].sort((a: any, b: any) => {
@@ -21,7 +20,7 @@ const MyNotificationForm = () => {
       </div>
     );
   return (
-    <div className="flex flex-col gap-4 text-sm md:text-[1rem] font-medium">
+    <div className="flex flex-col gap-4 text-sm md:text-[1rem] ">
       <div className="border bg-c_grey rounded-sm font-bold text-c_White grid grid-cols-3 md:grid-cols-10 gap-2 md:gap-8 py-2 mb-2">
         <p className="md:col-span-3 ml-4 md:ml-10">Name</p>
         <p className="md:col-span-1 ">Status</p>

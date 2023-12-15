@@ -1,4 +1,6 @@
 import nodemailer, { Transporter, SendMailOptions, SentMessageInfo } from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config();
 
 export class NotificationMail {
   public static async sendEmail(
@@ -13,13 +15,13 @@ export class NotificationMail {
       const transporter: Transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: process.env.GMAIL_USERNAME || "noreply3175@gmail.com",
-          pass: process.env.GMAIL_PASSWORD || "bbzs ffhp xqea ziug",
+          user: process.env.GMAIL_USERNAME,
+          pass: process.env.GMAIL_PASSWORD,
         },
       });
       // Send email
       const mailOptions: SendMailOptions = {
-        from: process.env.GMAIL_USERNAME || "noreply3175@gmail.com",
+        from: process.env.GMAIL_USERNAME,
         to: receiverEmail,
         subject: subject,
         html: `

@@ -27,6 +27,14 @@ class AuthService {
     return jwt.sign(payload, secretKey, options);
   }
 
+  private static createServerJWTToken() {
+    const payload = {
+      message: "This token is for the server",
+    };
+    const secretKey = process.env.SERVER_JWT_SECRET_KET || "";
+    return jwt.sign(payload, secretKey);
+  }
+
   public static verifyJWT(token: string) {
     const secretKey = process.env.JWT_SECRET_KEY || "";
     return new Promise((resolve, rejected) => {
@@ -70,6 +78,12 @@ class AuthService {
       });
     return true;
   }
+
+  // getServerJwtToken
+  // public static async getServerJwtToken() {
+  //   const jwtToken = this.createServerJWTToken();
+  //   return jwtToken;
+  // }
 
   //Get User
   public static getUser(email: string) {

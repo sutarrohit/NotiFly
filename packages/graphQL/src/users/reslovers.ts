@@ -4,8 +4,13 @@ import AuthService from "../services/auth/authService";
 const queries = {
   getUsers: async (_: any, { email }: { email: string }) => {
     const user: any = await AuthService.getUser(email);
-    return "This isdjkhuhhhhjj Query";
+    return "This is to test server";
   },
+
+  // getServerJwtToken: async (_: any) => {
+  //   const response = await AuthService.getServerJwtToken();
+  //   return response;
+  // },
 
   verifyJWT: async (_: any, { token }: { token: string }) => {
     const response = await AuthService.verifyJWT(token);

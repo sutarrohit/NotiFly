@@ -1,8 +1,8 @@
 import NotificationServices from "../services/Notification/NotificationServices";
 import { IGraphQLContext, IcreateNotification, IsendNotificationToQueue } from "@notifly/lib";
 export const queries = {
-  getAllNotifications: async (_: any) => {
-    const response = await NotificationServices.getAllNotification();
+  getAllNotifications: async (_: any, input: any, context: IGraphQLContext) => {
+    const response = await NotificationServices.getAllNotification(context);
     return response;
   },
 
@@ -18,8 +18,12 @@ export const mutations = {
     return response;
   },
 
-  sendNotificationToQueue: async (_: any, input: IsendNotificationToQueue) => {
-    const response = await NotificationServices.sendNotificationToQueue(input);
+  sendNotificationToQueue: async (
+    _: any,
+    input: IsendNotificationToQueue,
+    context: IGraphQLContext,
+  ) => {
+    const response = await NotificationServices.sendNotificationToQueue(input, context);
     return response;
   },
 

@@ -1,4 +1,7 @@
 import axios from "axios";
+import dotenv from "dotenv";
+dotenv.config();
+
 const graphqlEndpoint = "http://localhost:8000/graphql";
 const graphqlQuery = `
 query {
@@ -11,13 +14,24 @@ query {
 
 export let NotificationArray: any;
 
+const cookies = `AuthToken=${process.env.SERVER_COOKIES}`;
+
 export async function getNotificationData() {
   console.log("Fetching Notification Data.......");
 
   axios
-    .post(graphqlEndpoint, {
-      query: graphqlQuery,
-    })
+    .post(
+      graphqlEndpoint,
+      {
+        query: graphqlQuery,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookies,
+        },
+      },
+    )
     .then((response) => {
       const notifications = response.data.data.getAllNotifications;
       NotificationArray = notifications;

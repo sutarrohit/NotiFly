@@ -1,12 +1,13 @@
 {
   "name": "@notifly/websocketerver",
   "version": "1.0.0",
-  "main": "src/index.ts",
+  "main": "src/server.ts",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/server.ts"
+    "dev": "nodemon --exec ts-node src/server.ts"
   },
   "dependencies": {
+    "dotenv": "^16.3.1",
     "isomorphic-ws": "^5.0.0",
     "ws": "^8.14.2"
   }

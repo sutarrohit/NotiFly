@@ -3,6 +3,8 @@ import { WebSocketServer, WebSocket } from "ws";
 import cors from "cors";
 import { onSocketPreError, onSocketPostError } from "./controller/serverController";
 import { getTokensPrice } from "./controller/tokenPriceController";
+import dotenv from "dotenv";
+dotenv.config();
 
 const PORT = 1337;
 const app = express();
