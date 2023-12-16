@@ -5,9 +5,11 @@ import {
   IsendNotificationToQueue,
 } from "@notifly/lib";
 import jwt from "jsonwebtoken";
-import { prismaClient } from "@notifly/prisma";
+import prismaClient from "@notifly/prisma";
 import { GraphQLError } from "graphql";
 import { createClient } from "redis";
+import dotenv from "dotenv";
+dotenv.config();
 
 class NotificationService {
   private static verifyServerJWT(token: string) {
@@ -24,13 +26,19 @@ class NotificationService {
 
   private static async sendNotificationsToRedis(notifications: any) {
     try {
-      const client = await createClient()
-        .on("error", (err) => console.log("Redis Client Error", err))
-        .connect();
+      const client = await createClient({
+        password: process.env.REDIS_PASSWORD,
+        socket: {
+          host: process.env.REDIS_HOST,
+          port: parseInt(process.env.REDIS_PORT || ""),
+        },
+      }).connect();
 
       notifications.forEach(async (element: any) => {
         const queueData = await client.rPush("NotificationQueue", JSON.stringify(element));
       });
+
+      client.quit();
     } catch (error) {
       console.log(error);
       return error;
@@ -44,7 +52,8 @@ class NotificationService {
           extensions: customError.UNAUTHORIZED,
         });
 
-      const verifyToken = jwt.verify(context.authToken, "this_is_ranodin_string");
+      const verifyToken = jwt.verify(context.authToken, process.env.JWT_SECRET_KEY as string);
+
       const { email }: any = verifyToken;
       const user = await prismaClient.user.findUnique({ where: { email: email } });
 
@@ -183,6 +192,7 @@ class NotificationService {
       return error;
     }
   }
+
   public static async updateNotificationDeliveredTime(
     deliveredNotifications: string[],
     context: IGraphQLContext,

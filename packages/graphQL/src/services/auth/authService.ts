@@ -1,4 +1,4 @@
-import { prismaClient } from "@notifly/prisma";
+import prismaClient from "@notifly/prisma";
 import { Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";

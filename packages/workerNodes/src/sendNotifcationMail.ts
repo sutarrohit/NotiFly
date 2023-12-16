@@ -3,7 +3,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config();
 
-const graphqlEndpoint = "http://localhost:8000/graphql";
+const graphqlEndpoint = process.env.SERVER_DOMAIN as string;
 const mutation = `
 mutation Mutation($deliveredNotifications: [String]) {
   updateNotificationDeliveredTime(deliveredNotifications: $deliveredNotifications)
@@ -46,7 +46,7 @@ async function updateNotificationDeliveredTime(notificationsID: string[]) {
         },
       )
       .then((response) => {
-        console.log("response...------------....", response.data);
+        console.log("response", response.data);
       })
       .catch((error) => {
         console.log("error", error.message);

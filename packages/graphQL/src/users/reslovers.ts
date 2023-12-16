@@ -2,10 +2,10 @@ import { IcreateUser, IloginUser, IGraphQLContext } from "@notifly/lib";
 import AuthService from "../services/auth/authService";
 
 const queries = {
-  getUsers: async (_: any, { email }: { email: string }) => {
-    const user: any = await AuthService.getUser(email);
-    return "This is to test server";
-  },
+  // getUsers: async (_: any, { email }: { email: string }) => {
+  //   const user: any = await AuthService.getUser(email);
+  //   return "This is to test server";
+  // },
 
   // getServerJwtToken: async (_: any) => {
   //   const response = await AuthService.getServerJwtToken();

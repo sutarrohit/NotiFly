@@ -9,9 +9,16 @@ import { useMutation } from "@apollo/client";
 import { SingupUserMutationDocument } from "@/graphql/__generated__/graphql";
 import { Loader } from "@notifly/ui";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 const SignupForm = () => {
   const [signupUser, { data, loading, error }] = useMutation(SingupUserMutationDocument);
+
+  // const handleGoogleLogin = async () => {
+  //   const mydata = await signIn("google");
+  //   if (mydata) {
+  //   }
+  // };
 
   const {
     register,
@@ -102,7 +109,14 @@ const SignupForm = () => {
       </p>
 
       <div className=" flex gap-3 justify-center w-full">
-        <Button variant={"primary"} size={"small"} className="w-[90%] md:w-[85%] py-2">
+        <Button
+          // onClick={() => {
+          //   handleGoogleLogin();
+          // }}
+          variant={"primary"}
+          size={"small"}
+          className="w-[90%] md:w-[85%] py-2"
+        >
           <FaGoogle className="mr-2 text-xl" /> Google
         </Button>
       </div>

@@ -79,7 +79,7 @@ export const tokenData = [
   {
     id: 12,
     symbol: "WBTC",
-    name: "Ploygon",
+    name: "Wrapped Bitcoin",
     price: "WBTCUSDT",
     icon: "/icons/wbtc.png",
   },

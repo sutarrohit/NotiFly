@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "main": "index.ts",
   "license": "MIT",
+  "private": true,
   "scripts": {
-    "dev": "nodemon --exec ts-node src/server.ts"
+    "dev": "nodemon --exec ts-node src/server.ts",
+    "preprod": "npx tsc",
+    "prod": "nodemon dist/server.js",
+    "build": "npx tsc"
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",

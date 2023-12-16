@@ -55,10 +55,14 @@ CREATE TABLE "VerificationToken" (
 -- CreateTable
 CREATE TABLE "notifications" (
     "id" TEXT NOT NULL,
-    "targetPrice" INTEGER NOT NULL,
+    "targetPrice" DOUBLE PRECISION NOT NULL,
     "token" TEXT NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT true,
+    "receiverEmail" TEXT NOT NULL,
+    "CreatedAt" TIMESTAMP(3) NOT NULL,
+    "uptrend" BOOLEAN NOT NULL,
     "notificationType" "NotificationsType",
+    "DeliveredAt" TIMESTAMP(3),
     "userId" TEXT NOT NULL,
 
     CONSTRAINT "notifications_pkey" PRIMARY KEY ("id")
@@ -87,6 +91,15 @@ CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token"
 
 -- CreateIndex
 CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");
+
+-- CreateIndex
+CREATE INDEX "notifications_id_idx" ON "notifications"("id");
+
+-- CreateIndex
+CREATE INDEX "notifications_token_idx" ON "notifications"("token");
+
+-- CreateIndex
+CREATE INDEX "notifications_targetPrice_idx" ON "notifications"("targetPrice");
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

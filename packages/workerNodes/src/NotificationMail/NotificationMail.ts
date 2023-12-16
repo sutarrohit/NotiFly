@@ -54,7 +54,7 @@ export class NotificationMail {
               The current <span style="font-weight: 600; font-size: 19px;" >${token}</span> price is<span style="font-weight: 600; font-size: 19px;" > $${targetPrice}.</span> </br> The value of the <span style="font-weight: 600; font-size: 20px;" >${token}</span> token has changed to <span style="font-weight: 600; font-size: 19px;" >$${targetPrice}</span>
               </p>
               <!-- Button with an onclick event that triggers the redirection -->
-              <a href=${"http://localhost:3000"} target="_blank">
+              <a href=${process.env.CLIENT_DOMAIN} target="_blank">
                 <button
                   type="submit"
                   style="

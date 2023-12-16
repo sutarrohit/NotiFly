@@ -23,7 +23,7 @@ const PriceSocket = () => {
     if (visibleItems > 0) setVisibleItems(visibleItems - 15);
   };
 
-  const { getWebSocket } = useWebSocket("ws://localhost:1337");
+  const { getWebSocket } = useWebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_SERVER || "");
   getWebSocket()?.addEventListener("message", (event: any) => {
     let tokenPriceData = JSON.parse(event.data);
     setLiveTokenPrice(tokenPriceData);

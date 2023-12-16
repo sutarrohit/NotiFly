@@ -10,6 +10,8 @@ const CookieForm = () => {
   const [googleLogin, { data, loading, error }] = useMutation(GoogleLoginDocument);
   const router = useRouter();
 
+  console.log("This is getCookies");
+
   useEffect(() => {
     if (session && session.user && session.user.email) {
       googleLogin({

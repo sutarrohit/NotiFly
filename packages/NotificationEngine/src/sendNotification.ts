@@ -1,5 +1,8 @@
 import axios from "axios";
-const graphqlEndpoint = "http://localhost:8000/graphql";
+import dotenv from "dotenv";
+dotenv.config();
+
+const graphqlEndpoint = process.env.SERVER_DOMAIN as string;
 const mutation = `
   mutation Mutation($token: String, $prices: [Float]) {
     sendNotificationToQueue(token: $token, prices: $prices) {

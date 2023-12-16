@@ -19,6 +19,7 @@ export async function middleware(request: NextRequest) {
   const privatePath =
     request.nextUrl.pathname.startsWith("/setNotification") ||
     request.nextUrl.pathname.startsWith("/myNotification");
+  // request.nextUrl.pathname.startsWith("/getCookies");
   if (!AuthToken && privatePath) {
     return NextResponse.redirect(new URL("/", request.url));
   }

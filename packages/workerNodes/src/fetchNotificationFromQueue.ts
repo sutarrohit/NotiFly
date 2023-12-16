@@ -5,9 +5,13 @@ dotenv.config();
 
 async function fetchNotificationFromRedisQueue() {
   try {
-    const client = await createClient()
-      .on("error", (err) => console.log("Redis Client Error", err))
-      .connect();
+    const client = await createClient({
+      password: process.env.REDIS_PASSWORD,
+      socket: {
+        host: process.env.REDIS_HOST,
+        port: parseInt(process.env.REDIS_PORT || ""),
+      },
+    }).connect();
 
     const notifications = await client.lRange("NotificationQueue", 0, 2);
     const parsedNotifications = notifications.map((element) => JSON.parse(element));

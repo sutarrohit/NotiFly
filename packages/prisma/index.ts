@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config();
+import prisma from "./prismaClient";
 
-export * from "./prismaClient/index";
+const prismaClient = prisma;
+export default prismaClient;

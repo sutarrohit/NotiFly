@@ -1,11 +1,13 @@
 {
   "name": "@notifly/workerserver",
   "version": "1.0.0",
-  "main": "src/fetchNotificationFromQueue.ts",
+  "main": "dist/fetchNotificationFromQueue.ts",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "nodemon --exec ts-node src/fetchNotificationFromQueue.ts"
+    "dev": "nodemon --exec ts-node src/fetchNotificationFromQueue.ts",
+    "preprod": "npx tsc",
+    "prod": "nodemon dist/fetchNotificationFromQueue.js"
   },
   "dependencies": {
     "dotenv": "^16.3.1"

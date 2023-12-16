@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "main": "index.ts",
   "license": "MIT",
+  "private": true,
   "scripts": {
-    "dev": "nodemon src/triggerNotification.ts"
+    "dev": "nodemon src/triggerNotification.ts",
+    "preprod": "npx tsc",
+    "prod": "nodemon dist/triggerNotification.js"
   },
   "dependencies": {
     "axios": "^1.6.2",

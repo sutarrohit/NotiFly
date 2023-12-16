@@ -2,7 +2,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config();
 
-const graphqlEndpoint = "http://localhost:8000/graphql";
+const graphqlEndpoint = process.env.SERVER_DOMAIN as string;
 const graphqlQuery = `
 query {
   getAllNotifications {
@@ -18,7 +18,6 @@ const cookies = `AuthToken=${process.env.SERVER_COOKIES}`;
 
 export async function getNotificationData() {
   console.log("Fetching Notification Data.......");
-
   axios
     .post(
       graphqlEndpoint,
