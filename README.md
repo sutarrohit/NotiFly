@@ -3,6 +3,8 @@
 Notifly is a crypto notification platform designed to deliver real-time cryptocurrency price notifications.
 It is crafted to keep users informed about the latest developments in the crypto market, ensuring they receive timely updates on price fluctuations and trends.
 
+<img src="https://notifly28.s3.eu-north-1.amazonaws.com/Screenshot+from+2023-12-15+23-43-16.png", alt="mainImage"/>
+
 ### Technologies Used
 
 - Next.js
