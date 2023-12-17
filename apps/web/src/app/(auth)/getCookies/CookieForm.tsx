@@ -25,7 +25,7 @@ const CookieForm = () => {
         router.refresh();
       }
     }
-  }, [session]);
+  }, [googleLogin, loading, router, session, status]);
 
   if (session === null) return <>{(router.replace("/", { scroll: false }), router.refresh())}</>;
 

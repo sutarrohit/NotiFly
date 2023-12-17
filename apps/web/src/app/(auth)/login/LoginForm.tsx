@@ -51,7 +51,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     handleLogin();
-  }, [data]);
+  }, [data, handleLogin]);
 
   return (
     <form

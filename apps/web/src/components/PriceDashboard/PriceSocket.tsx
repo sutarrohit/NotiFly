@@ -33,6 +33,7 @@ const PriceSocket = () => {
     (e) => {
       setSideMenu(false);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [overlay],
   );
 
