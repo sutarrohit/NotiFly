@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from "react";
+import Image from "next/image";
 import { InputBox, Button } from "@notifly/ui";
 
 const Contactus = () => {
@@ -18,7 +19,6 @@ const Contactus = () => {
             {/* card */}
 
             <div className="border-2 border-c_grey rounded-lg w-[90%] md:w-[90%] xl:w-[65%] p-5 md:p-10 flex flex-col gap-4 ">
-              <h1 className="flex justify-center font-bold text-2xl md:text-3xl">Contact us</h1>
               <div className="flex flex-col gap-1">
                 <label htmlFor="">Name</label>
                 <InputBox type="text" className="p-2" placeholder="Enter name" />
