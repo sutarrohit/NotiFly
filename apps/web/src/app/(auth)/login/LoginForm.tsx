@@ -51,7 +51,8 @@ const LoginForm = () => {
 
   useEffect(() => {
     handleLogin();
-  }, [data, handleLogin]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   return (
     <form

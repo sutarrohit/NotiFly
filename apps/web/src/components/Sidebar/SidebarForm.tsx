@@ -78,7 +78,7 @@ const SidebarForm = ({ token }: { token: string }) => {
             onClick={() => {
               setSideMenu(!sideMenu);
             }}
-            href="/"
+            href="/about"
           >
             About
           </Link>
@@ -86,7 +86,7 @@ const SidebarForm = ({ token }: { token: string }) => {
             onClick={() => {
               setSideMenu(!sideMenu);
             }}
-            href="/"
+            href="/contactus"
           >
             Contact us
           </Link>

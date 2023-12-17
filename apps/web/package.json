@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && prisma generate",
+    "build": " prisma generate  && next build",
+    "vercelBuild": "npx prisma generate --schema=./../../packages/prisma/prisma/schema.prisma  && next build",
     "start": "next start",
     "lint": "next lint",
     "generate": "graphql-codegen"
