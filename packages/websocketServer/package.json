@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node src/server.ts",
     "preprod": "npx tsc",
-    "prod": "nodemon src/server.js",
+    "prod": "nodemon dist/server.js",
     "build": "npx tsc"
   },
   "dependencies": {
