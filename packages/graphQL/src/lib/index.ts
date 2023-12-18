@@ -3,8 +3,3 @@ export * from "./zod/prismaValidation";
 export * from "./zod/clientValidation";
 export * from "./interfaces/userInterface";
 export * from "./interfaces/notificationInterface";
-export * from "./websocket/TokenPriceSocket";
-export * from "./tokenData/tokenData";
-// export * from "./Emails/NotificationMail";
-// export * from "./Emails/passwordVerification";
-// export * from "./Emails/verification";
