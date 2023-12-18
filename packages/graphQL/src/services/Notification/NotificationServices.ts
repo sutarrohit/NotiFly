@@ -1,14 +1,16 @@
 import {
-  customError,
   IcreateNotification,
   IGraphQLContext,
   IsendNotificationToQueue,
-} from "@notifly/lib";
+  customError,
+} from "../../lib";
 import jwt from "jsonwebtoken";
-import prismaClient from "@notifly/prisma";
+import prismaClient from "../../prisma/prismaClient";
 import { GraphQLError } from "graphql";
+
 import { createClient } from "redis";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 class NotificationService {
