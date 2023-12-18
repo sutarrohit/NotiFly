@@ -4,6 +4,10 @@
   "main": "index.ts",
   "private": true,
   "license": "MIT",
+  "scripts": {
+    "dev": "npx tsc",
+    "prod": "npx tsc"
+  },
   "dependencies": {
     "@notifly/lib": "*",
     "@prisma/client": "5.5.2",

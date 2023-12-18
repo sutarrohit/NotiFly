@@ -6,7 +6,7 @@ export const { getClient } = registerApolloClient(() => {
     cache: new InMemoryCache(),
     link: new HttpLink({
       // this needs to be an absolute url, as relative urls cannot be used in SSR
-      uri: "http://localhost:8000/graphql",
+      uri: process.env.NEXT_PUBLIC_SERVER_DOMAIN,
       fetchOptions: {
         cache: "no-store", // Set this to disable caching
         errorPolicy: "all", // Add this line for handling all errors
