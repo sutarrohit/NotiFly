@@ -175,7 +175,7 @@ class NotificationService {
 
       await this.sendNotificationsToRedis(notifications);
 
-      const notificationIds = notifications.map((notification) => notification.id);
+      const notificationIds = notifications.map((notification: any) => notification.id);
       const updatedNotifications = await prismaClient.notifications.updateMany({
         where: {
           id: {
