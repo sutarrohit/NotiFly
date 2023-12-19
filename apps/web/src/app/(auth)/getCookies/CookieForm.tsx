@@ -10,21 +10,28 @@ const CookieForm = () => {
   const [googleLogin, { data, loading, error }] = useMutation(GoogleLoginDocument);
   const router = useRouter();
 
-  console.log("This is getCookies");
-
   useEffect(() => {
-    if (session && session.user && session.user.email) {
-      googleLogin({
-        variables: {
-          email: session?.user?.email,
-          sessionToken: undefined,
-        },
-      });
-      if (!loading && status === "authenticated") {
-        router.replace("/", { scroll: false });
-        router.refresh();
+    const handleGoogleLogin = async () => {
+      if (session && session.user && session.user.email) {
+        try {
+          await googleLogin({
+            variables: {
+              email: session.user.email,
+              sessionToken: undefined,
+            },
+          });
+
+          if (!loading && status === "authenticated") {
+            router.replace("/", { scroll: false });
+            router.refresh();
+          }
+        } catch (error) {
+          console.error("Google login error:", error);
+        }
       }
-    }
+    };
+
+    handleGoogleLogin();
   }, [googleLogin, loading, router, session, status]);
 
   if (session === null) return <>{(router.replace("/", { scroll: false }), router.refresh())}</>;

@@ -14,11 +14,9 @@ import { signIn } from "next-auth/react";
 const SignupForm = () => {
   const [signupUser, { data, loading, error }] = useMutation(SingupUserMutationDocument);
 
-  // const handleGoogleLogin = async () => {
-  //   const mydata = await signIn("google");
-  //   if (mydata) {
-  //   }
-  // };
+  const handleGoogleLogin = async () => {
+    const mydata = await signIn("google");
+  };
 
   const {
     register,
@@ -110,9 +108,9 @@ const SignupForm = () => {
 
       <div className=" flex gap-3 justify-center w-full">
         <Button
-          // onClick={() => {
-          //   handleGoogleLogin();
-          // }}
+          onClick={() => {
+            handleGoogleLogin();
+          }}
           variant={"primary"}
           size={"small"}
           className="w-[90%] md:w-[85%] py-2"
