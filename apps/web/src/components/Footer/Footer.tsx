@@ -16,8 +16,8 @@ const Footer = () => {
         <div className="font-bold flex flex-col justify-between md:items-center p-6">
           <div className="flex gap-5">
             <Link href="/">Home</Link>
-            <Link href="/">About</Link>
-            <Link href="/">Contact us</Link>
+            <Link href="/about">About</Link>
+            <Link href="/contactus">Contact us</Link>
           </div>
           <div className="mt-6 md:mt-0 flex gap-4 text-3xl">
             <Link href="https://github.com/sutarrohit" target="_blank">

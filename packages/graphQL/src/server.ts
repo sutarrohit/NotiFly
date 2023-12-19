@@ -5,6 +5,9 @@ import cookieParser from "cookie-parser";
 import { parse } from "cookie";
 import cors from "cors";
 import { server } from "./index";
+import helmet from "helmet";
+import hpp from "hpp";
+import mongoSanitize from "express-mongo-sanitize";
 
 const startServer = async () => {
   const app = express();
@@ -13,6 +16,13 @@ const startServer = async () => {
     origin: process.env.CLIENT_DOMAIN,
     credentials: true,
   };
+
+  // SECURE HEADER
+  app.use(helmet());
+  //Protect against HTTP Parameter Pollution attacks
+  app.use(hpp());
+  // DATA SANITIZATION AGAINST NoSQL QUERY INJECTION
+  app.use(mongoSanitize());
 
   app.use(cors(corsOptions));
   app.use(bodyParser.json());

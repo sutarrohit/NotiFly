@@ -7,10 +7,8 @@ import {
 import jwt from "jsonwebtoken";
 import prismaClient from "../../prisma/prismaClient";
 import { GraphQLError } from "graphql";
-
 import { createClient } from "redis";
 import dotenv from "dotenv";
-
 dotenv.config();
 
 class NotificationService {
