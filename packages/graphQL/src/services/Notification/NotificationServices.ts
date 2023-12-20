@@ -13,7 +13,7 @@ dotenv.config();
 
 class NotificationService {
   private static verifyServerJWT(token: string) {
-    const secretKey = process.env.SERVER_JWT_SECRET_KET || "";
+    const secretKey = process.env.SERVER_JWT_SECRET_KEY || "";
     return new Promise((resolve, rejected) => {
       jwt.verify(token, secretKey, (err, decoded) => {
         if (!err) {

@@ -166,7 +166,7 @@ class AuthService {
       const token = this.createJWTToken({ userId: user.id, email: user.email || "", userType });
       context.res.cookie("AuthToken", token, {
         httpOnly: true,
-        secure: true,
+        // secure: true,
         expires: new Date(Date.now() + 30 * 60 * 60 * 1000),
       });
 
@@ -242,7 +242,7 @@ class AuthService {
       });
       context.res.cookie("AuthToken", jwtToken, {
         httpOnly: true,
-        secure: true,
+        // secure: true,
         expires: new Date(Date.now() + 30 * 60 * 60 * 1000),
       });
       return {
@@ -287,7 +287,7 @@ class AuthService {
     const token = this.createJWTToken({ userId: user.id, email: user.email as string, userType });
     context.res.cookie("AuthToken", token, {
       httpOnly: true,
-      secure: true,
+      // secure: true,
       expires: new Date(Date.now() + 30 * 60 * 60 * 1000),
     });
 
@@ -304,7 +304,7 @@ class AuthService {
 
       context.res.cookie("AuthToken", "", {
         httpOnly: true,
-        secure: true,
+        // secure: true,
         expires: new Date(0),
       });
       return "User is logged out";
@@ -345,7 +345,7 @@ class AuthService {
 
       context.res.cookie("AuthToken", token, {
         httpOnly: true,
-        secure: true,
+        // secure: true,
         expires: new Date(Date.now() + 30 * 60 * 60 * 1000),
       });
 
