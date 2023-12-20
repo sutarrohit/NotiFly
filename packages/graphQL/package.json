@@ -6,7 +6,6 @@
   "private": true,
   "scripts": {
     "dev": "nodemon --exec ts-node src/server.ts",
-    "preprod": "npx tsc",
     "prod": "nodemon dist/server.js",
     "build": "npx tsc"
   },
@@ -14,17 +13,22 @@
     "@apollo/server": "^4.9.5",
     "@notifly/lib": "*",
     "@notifly/prisma": "*",
+    "@types/hpp": "^0.2.5",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cookie": "^0.6.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "express-mongo-sanitize": "^2.2.0",
     "graphql": "^16.8.1",
+    "helmet": "^7.1.0",
+    "hpp": "^0.2.3",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.4",
     "nodemon": "^3.0.1",
-    "redis": "^4.6.11"
+    "redis": "^4.6.11",
+    "xss": "^1.0.14"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

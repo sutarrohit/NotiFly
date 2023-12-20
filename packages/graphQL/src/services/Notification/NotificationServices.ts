@@ -1,11 +1,11 @@
 import {
-  customError,
   IcreateNotification,
   IGraphQLContext,
   IsendNotificationToQueue,
-} from "@notifly/lib";
+  customError,
+} from "../../lib";
 import jwt from "jsonwebtoken";
-import prismaClient from "@notifly/prisma";
+import prismaClient from "../../prisma/prismaClient";
 import { GraphQLError } from "graphql";
 import { createClient } from "redis";
 import dotenv from "dotenv";
@@ -13,7 +13,7 @@ dotenv.config();
 
 class NotificationService {
   private static verifyServerJWT(token: string) {
-    const secretKey = process.env.SERVER_JWT_SECRET_KET || "";
+    const secretKey = process.env.SERVER_JWT_SECRET_KEY || "";
     return new Promise((resolve, rejected) => {
       jwt.verify(token, secretKey, (err, decoded) => {
         if (!err) {
@@ -175,7 +175,7 @@ class NotificationService {
 
       await this.sendNotificationsToRedis(notifications);
 
-      const notificationIds = notifications.map((notification) => notification.id);
+      const notificationIds = notifications.map((notification: any) => notification.id);
       const updatedNotifications = await prismaClient.notifications.updateMany({
         where: {
           id: {

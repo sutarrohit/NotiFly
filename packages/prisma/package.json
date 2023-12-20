@@ -1,11 +1,11 @@
 {
   "name": "@notifly/prisma",
   "version": "1.0.0",
-  "main": "src/prismaClient/index.ts",
+  "main": "prismaClient/index.ts",
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "npx tsc",
+    "dev": "nodemon ",
     "prod": "npx tsc"
   },
   "dependencies": {

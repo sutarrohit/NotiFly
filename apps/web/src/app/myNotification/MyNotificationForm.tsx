@@ -58,12 +58,16 @@ const MyNotificationForm = () => {
           <div key={key}>
             <div className="border dark:border-2 border-c_grey rounded-lg grid grid-cols-3 md:grid-cols-10 items-center gap-2 md:gap-8 py-2">
               <div className="md:col-span-3 flex items-center gap-2 md:gap-4 ml-2 md:ml-5">
-                <Image
-                  src={`${iconsId + ".png"}` || `${iconsId + ".jpg"}`}
-                  alt={element.token || ""}
-                  width="40"
-                  height="40"
-                />
+                <div className="flex justify-center items-center gap-2">
+                  <p className="hidden md:block text-c_Litegrey">{key + 1}.</p>
+                  <Image
+                    src={`${iconsId + ".png"}` || `${iconsId + ".jpg"}`}
+                    alt={element.token || ""}
+                    width="40"
+                    height="40"
+                  />
+                </div>
+
                 <p className="">{element.token?.split("USDT")}</p>
               </div>
               <p className="md:col-span-1">{element.active ? "Pending" : "Delivered"}</p>
