@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { UserLogoutDocument } from "@/graphql/__generated__/graphql";
 import { useMutation } from "@apollo/client";
+import { useEffect, useState } from "react";
 
 const HeaderButton = ({ token }: { token: string }) => {
   const path = usePathname();
@@ -14,18 +15,20 @@ const HeaderButton = ({ token }: { token: string }) => {
   const { data: session } = useSession();
   const [userLogout, { data, loading, error }] = useMutation(UserLogoutDocument);
 
-  const logOutUser = () => {
+  const logOutUser = async () => {
     if (session) {
       signOut();
     }
-    userLogout({
+    const response = await userLogout({
       variables: {
         email: session?.user?.email,
       },
     });
 
-    router.replace("/", { scroll: false });
-    router.refresh();
+    if (response) {
+      router.replace("/", { scroll: false });
+      router.refresh();
+    }
   };
 
   return (
